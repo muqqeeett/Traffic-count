@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traffic Counter</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1a1d21;--mut:#6b7280;--ac:#0b6bcb;--bd:#d9dce1}
+@media (prefers-color-scheme:dark){:root{--bg:#111316;--card:#1c1f24;--tx:#eceef1;--mut:#9aa1ab;--ac:#4c9aff;--bd:#2d323a}}
+*{box-sizing:border-box}
+body{margin:0 auto;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:12px;max-width:600px}
+h1{font-size:18px;margin:4px 0 8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:10px}
+select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px;width:100%;margin-bottom:8px}
+label{font-size:12px;color:var(--mut)}
+.row{display:flex;gap:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tap{padding:20px 8px;border-radius:14px;border:0;background:var(--ac);color:#fff;font-size:17px;font-weight:700;touch-action:manipulation}
+.tap:active{transform:scale(.96);filter:brightness(.85)}
+.tap small{display:block;font-size:28px;font-weight:800;margin-top:4px}
+.btn{padding:10px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:14px;font-weight:600}
+.btn.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn.red{color:#d32f2f}.btn.warn{background:#d32f2f;color:#fff;border-color:#d32f2f}
+.mut{color:var(--mut);font-size:13px}
+.bar{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}
+th,td{padding:5px 6px;border-bottom:1px solid var(--bd);text-align:right}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
+tfoot td{font-weight:700}
+textarea{width:100%;height:110px;font:12px monospace;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:8px}
+</style></head><body>
+<h1>🚦 Traffic Counter</h1>
+
+<div class="card">
+  <label>Direction</label>
+  <select id="dir">
+    <option>Sango T-Junction to Trans-Amusement Rd</option>
+    <option>Trans-Amusement Rd to Sango T-Junction</option>
+  </select>
+  <label>Session (time range)</label>
+  <div class="row"><select id="slot" style="margin:0"></select><button class="btn pri" id="next">Next ▶</button></div>
+</div>
+
+<div class="grid" id="pad"></div>
+
+<div class="card bar" style="margin-top:10px">
+  <div><b id="tot">0</b> <span class="mut">vehicles this session · </span><b id="pce">0</b> <span class="mut">PCE</span></div>
+  <button class="btn" id="undo">↶ Undo</button>
+</div>
+
+<div class="card">
+  <b>Accumulated data</b>
+  <div class="wrap" style="margin-top:6px"><table id="tbl"></table></div>
+</div>
+
+<div class="card">
+  <div class="row"><button class="btn pri" id="dl" style="flex:1">Download CSV</button><button class="btn" id="copy" style="flex:1">Copy CSV</button><button class="btn red" id="reset" style="flex:1">Reset</button></div>
+  <textarea id="csv" style="display:none;margin-top:8px" readonly></textarea>
+</div>
+
+<script>
+const CLS=[["Motorcycle","🏍️",0.5],["Tricycle","🛺",0.75],["Car/Taxi","🚗",1],["Bus","🚌",2],["HGV","🚚",3.5],["Artic/Trailer","🚛",5]];
+const SLOTS=[];for(let m=960;m<1080;m+=15){const f=x=>String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0");SLOTS.push(f(m)+" to "+f(m+15))}
+const KEY="trafficSimple1";
+let S={dir:0,slot:0,data:{},hist:[]};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const key=()=>S.dir+"|"+S.slot;
+const pcu=r=>r.reduce((a,n,i)=>a+n*CLS[i][2],0);
+SLOTS.forEach((s,i)=>$("slot").add(new Option(s,i)));
+CLS.forEach((c,i)=>{const b=document.createElement("button");b.className="tap";b.innerHTML=c[1]+" "+c[0]+"<small id='n"+i+"'>0</small>";
+  b.onclick=()=>{const k=key();(S.data[k]=S.data[k]||Array(6).fill(0))[i]++;S.hist.push([k,i]);try{navigator.vibrate(15)}catch(e){}save();render()};$("pad").appendChild(b)});
+function rowsList(){return Object.keys(S.data).map(k=>k.split("|").map(Number)).sort((a,b)=>a[0]-b[0]||a[1]-b[1]).map(([d,s])=>({d,s,v:S.data[d+"|"+s]}))}
+function render(){
+  $("dir").selectedIndex=S.dir;$("slot").selectedIndex=S.slot;
+  const v=S.data[key()]||Array(6).fill(0);
+  v.forEach((n,i)=>$("n"+i).textContent=n);
+  $("tot").textContent=v.reduce((a,b)=>a+b,0);$("pce").textContent=pcu(v).toFixed(1);
+  const L=rowsList();
+  if(!L.length){$("tbl").innerHTML="<tr><td class='mut'>No counts yet</td></tr>";return}
+  let h="<tr><th>Session</th><th>Direction</th>"+CLS.map(c=>"<th>"+c[1]+"</th>").join("")+"<th>Σ</th><th>PCE</th></tr>";
+  const tt=Array(6).fill(0);
+  L.forEach(r=>{r.v.forEach((n,i)=>tt[i]+=n);h+="<tr><td>"+SLOTS[r.s]+"</td><td>"+(r.d?"Trans→Sango":"Sango→Trans")+"</td>"+r.v.map(n=>"<td>"+(n||"·")+"</td>").join("")+"<td><b>"+r.v.reduce((a,b)=>a+b,0)+"</b></td><td>"+pcu(r.v).toFixed(1)+"</td></tr>"});
+  h+="<tfoot><tr><td>Total</td><td></td>"+tt.map(n=>"<td>"+n+"</td>").join("")+"<td>"+tt.reduce((a,b)=>a+b,0)+"</td><td>"+pcu(tt).toFixed(1)+"</td></tr></tfoot>";
+  $("tbl").innerHTML=h;
+}
+function csv(){const q=s=>'"'+s+'"',D=[$("dir").options[0].text,$("dir").options[1].text];
+  let s="Direction,Session,"+CLS.map(c=>c[0]).join(",")+",Total,PCE\n";
+  rowsList().forEach(r=>{s+=[q(D[r.d]),q(SLOTS[r.s]),...r.v,r.v.reduce((a,b)=>a+b,0),pcu(r.v).toFixed(2)].join(",")+"\n"});return s}
+$("dir").onchange=e=>{S.dir=e.target.selectedIndex;save();render()};
+$("slot").onchange=e=>{S.slot=e.target.selectedIndex;save();render()};
+$("next").onclick=()=>{S.slot=Math.min(SLOTS.length-1,S.slot+1);save();render()};
+$("undo").onclick=()=>{const h=S.hist.pop();if(!h)return;const v=S.data[h[0]];v[h[1]]--;if(!v.some(n=>n))delete S.data[h[0]];save();render()};
+$("dl").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv()],{type:"text/csv"}));a.download="traffic-count.csv";a.click()};
+$("copy").onclick=async()=>{const s=csv(),t=$("csv");t.value=s;t.style.display="block";
+  try{await navigator.clipboard.writeText(s);$("copy").textContent="Copied ✓"}catch(e){t.select();$("copy").textContent="Copy below"}
+  setTimeout(()=>$("copy").textContent="Copy CSV",2500)};
+let rt;$("reset").onclick=()=>{
+  if(!rt){$("reset").textContent="Tap again";$("reset").classList.add("warn");rt=setTimeout(()=>{rt=0;$("reset").textContent="Reset";$("reset").classList.remove("warn")},3000)}
+  else{clearTimeout(rt);rt=0;S.data={};S.hist=[];S.slot=0;save();$("reset").textContent="Reset";$("reset").classList.remove("warn");$("csv").style.display="none";render()}};
+render();
+</script></body></html>
