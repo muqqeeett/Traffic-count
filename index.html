@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -7,806 +6,178 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  /* Wise Light Mode Palette */
   --bg-app: #f4f5f0;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
   --bg-subtle: #eeefe9;
   --border-subtle: #e2e4dc;
   --border-strong: #cfd2c6;
-  
   --text-main: #141b14;
   --text-muted: #5e665e;
   --text-subtle: #899388;
-  
-  --brand-green: #9fe870; /* Iconic Wise bright green */
+  --brand-green: #9fe870;
   --brand-green-hover: #8be058;
   --brand-green-text: #163300;
   --brand-dark-forest: #163300;
-  
-  --accent-interactive: #163300;
-  --accent-interactive-hover: #224d00;
-  --accent-interactive-text: #ffffff;
-  
   --danger: #d9383a;
   --danger-bg: #fde8e8;
   --danger-text: #9b1c1c;
-
   --card-radius: 24px;
   --inner-radius: 16px;
   --pill-radius: 9999px;
   --shadow-sm: 0 2px 8px rgba(20, 27, 20, 0.04);
   --shadow-md: 0 12px 32px rgba(20, 27, 20, 0.08);
 }
-
 html.dark {
-  /* Wise Dark Mode / Forest Slate */
   --bg-app: #0e120f;
   --bg-surface: #171d18;
   --bg-surface-elevated: #202721;
   --bg-subtle: #222a23;
   --border-subtle: #2d362e;
   --border-strong: #3b463c;
-  
   --text-main: #f5f8f5;
   --text-muted: #9ba79b;
   --text-subtle: #6c776d;
-  
   --brand-green: #9fe870;
   --brand-green-hover: #aef085;
   --brand-green-text: #0e120f;
   --brand-dark-forest: #9fe870;
-  
-  --accent-interactive: #9fe870;
-  --accent-interactive-hover: #8be058;
-  --accent-interactive-text: #0e120f;
-  
   --danger: #ef4444;
   --danger-bg: #381b1b;
   --danger-text: #fca5a5;
-  
   --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.4);
 }
-
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-app);
-  color: var(--text-main);
-  font-family: var(--font-main);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  margin: 0; padding: 0; background-color: var(--bg-app); color: var(--text-main);
+  font-family: var(--font-main); -webkit-font-smoothing: antialiased; min-height: 100vh;
+  display: flex; flex-direction: column;
 }
-
-/* Container */
-.app-container {
-  max-width: 680px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 20px 16px 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Header & Navigation Bar (Wise Inspired) */
+.app-container { max-width: 680px; margin: 0 auto; width: 100%; padding: 20px 16px 80px; display: flex; flex-direction: column; gap: 16px; }
 .header-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--pill-radius);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 8px;
+  display: flex; align-items: center; justify-content: space-between; padding: 12px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--pill-radius);
+  box-shadow: var(--shadow-sm); margin-bottom: 8px;
 }
-
-.brand-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 17px;
-  letter-spacing: -0.02em;
-  color: var(--text-main);
-}
-.brand-icon {
-  width: 34px;
-  height: 34px;
-  background: var(--brand-green);
-  color: #163300;
-  border-radius: var(--pill-radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 18px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
+.brand-badge { display: flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-weight: 800; font-size: 17px; letter-spacing: -0.02em; color: var(--text-main); }
+.brand-icon { width: 34px; height: 34px; background: var(--brand-green); color: #163300; border-radius: var(--pill-radius); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
 .btn-icon-pill {
-  height: 40px;
-  padding: 0 16px;
-  border-radius: var(--pill-radius);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-main);
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 13.5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  height: 40px; padding: 0 16px; border-radius: var(--pill-radius); background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle); color: var(--text-main); font-family: var(--font-heading);
+  font-weight: 600; font-size: 13.5px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.15s ease;
 }
-.btn-icon-pill:hover {
-  background: var(--border-subtle);
-}
-
+.btn-icon-pill:hover { background: var(--border-subtle); }
 .btn-menu-pill {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--pill-radius);
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.15s ease;
+  width: 40px; height: 40px; border-radius: var(--pill-radius); background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle); color: var(--text-main); display: flex; align-items: center;
+  justify-content: center; cursor: pointer; padding: 0; transition: all 0.15s ease;
 }
-.btn-menu-pill:hover {
-  background: var(--border-subtle);
-}
-
-/* Wise Navigation Drawer */
-.ov {
-  position: fixed;
-  inset: 0;
-  background: rgba(14, 18, 15, 0.65);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
+.btn-menu-pill:hover { background: var(--border-subtle); }
+.ov { position: fixed; inset: 0; background: rgba(14, 18, 15, 0.65); backdrop-filter: blur(4px); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
 .dr {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 320px;
-  max-width: 86vw;
-  background: var(--bg-surface);
-  border-right: 1px solid var(--border-subtle);
-  z-index: 101;
-  transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 28px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: var(--shadow-md);
+  position: fixed; top: 0; bottom: 0; left: 0; width: 320px; max-width: 86vw; background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle); z-index: 101; transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 28px 20px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow-md);
 }
-body.open .dr { transform: none; }
-body.open .ov { opacity: 1; pointer-events: auto; }
-
-.dr-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: 8px;
-}
-.dr-title {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 19px;
-  letter-spacing: -0.02em;
-}
-.dr-links {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+body.open .dr { transform: none; } body.open .ov { opacity: 1; pointer-events: auto; }
+.dr-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 8px; }
+.dr-title { font-family: var(--font-heading); font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+.dr-links { display: flex; flex-direction: column; gap: 6px; }
 .dr a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
-  border-radius: var(--pill-radius);
-  color: var(--text-main);
-  text-decoration: none;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.dr a:hover {
-  background: var(--bg-subtle);
-}
-.dr a.on {
-  background: var(--brand-green);
-  color: #163300;
-}
-.dr-meta {
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-subtle);
-  font-size: 13px;
-  color: var(--text-subtle);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Wise Card Component */
-.wise-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
-  transition: border-color 0.2s ease;
-}
-.wise-card-title {
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin: 0 0 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.wise-card-subtitle {
-  color: var(--text-muted);
-  font-size: 14.5px;
-  line-height: 1.5;
-  margin: -8px 0 18px;
-}
-
-/* Hero Section */
-.wise-hero {
-  background: linear-gradient(145deg, var(--bg-surface) 0%, var(--bg-subtle) 100%);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  padding: 32px 28px;
-  box-shadow: var(--shadow-md);
-  position: relative;
-  overflow: hidden;
-}
-
-.wise-hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--brand-green);
-  color: #163300;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: var(--pill-radius);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 16px;
-}
-
-.wise-hero h1 {
-  font-family: var(--font-heading);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  margin: 0 0 12px;
-}
-.wise-hero p {
-  color: var(--text-muted);
-  font-size: 16px;
-  line-height: 1.55;
-  margin: 0 0 24px;
-  max-width: 540px;
-}
-
-/* Traffic Visual Element */
-.hero-visual-card {
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--inner-radius);
-  padding: 16px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: 12px;
-}
-.lane-pill {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--bg-subtle);
-  padding: 8px 14px;
-  border-radius: var(--pill-radius);
-}
-.lane-pill svg {
-  flex-shrink: 0;
-}
-
-/* Button System */
-.btn {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 15px;
-  padding: 14px 24px;
-  border-radius: var(--pill-radius);
-  border: 1px solid transparent;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  user-select: none;
-}
-.btn:active {
-  transform: scale(0.98);
-}
-.btn-primary {
-  background: var(--brand-green);
-  color: #163300;
-  box-shadow: 0 4px 14px rgba(159, 232, 112, 0.25);
-}
-.btn-primary:hover {
-  background: var(--brand-green-hover);
-}
-.btn-secondary {
-  background: var(--bg-subtle);
-  color: var(--text-main);
-  border-color: var(--border-subtle);
-}
-.btn-secondary:hover {
-  background: var(--border-subtle);
-}
-.btn-outline-action {
-  background: transparent;
-  color: var(--text-main);
-  border: 1.5px solid var(--border-strong);
-}
-.btn-outline-action:hover {
-  background: var(--bg-subtle);
-  border-color: var(--brand-green);
-}
-.btn-danger {
-  background: var(--danger-bg);
-  color: var(--danger-text);
-  border-color: transparent;
-}
-.btn-danger:hover {
-  filter: brightness(0.95);
-}
-.btn-danger:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  filter: none;
-}
-.btn-block {
-  width: 100%;
-}
-.btn-group {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.btn-group .btn {
-  flex: 1;
-  min-width: 140px;
-}
-
-/* Form inputs & controls */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-label {
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-input, select, textarea {
-  width: 100%;
-  font-family: var(--font-main);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text-main);
-  background: var(--bg-subtle);
-  border: 1.5px solid var(--border-subtle);
-  border-radius: var(--inner-radius);
-  padding: 13px 16px;
-  outline: none;
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--brand-green);
-  background: var(--bg-surface);
-}
-input:disabled, select:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-/* Switch */
-.switch-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg-subtle);
-  padding: 14px 18px;
-  border-radius: var(--inner-radius);
-  margin: 12px 0;
-  cursor: pointer;
-}
-.switch-label {
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--text-main);
-  text-transform: none;
-}
-.switch-input {
-  width: 20px;
-  height: 20px;
-  accent-color: #163300;
-  cursor: pointer;
-}
-
-/* Tally Tap Pad */
-.tally-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 14px;
-}
-.tally-pad {
-  background: var(--bg-surface);
-  border: 2px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  padding: 22px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.12s ease;
-  user-select: none;
-  box-shadow: var(--shadow-sm);
-}
-.tally-pad:hover {
-  border-color: var(--brand-green);
-}
-.tally-pad:active {
-  transform: scale(0.96);
-  background: var(--brand-green);
-  border-color: var(--brand-green);
-}
-.tally-pad:active .tally-name,
-.tally-pad:active .tally-count {
-  color: #163300 !important;
-}
-.tally-name {
-  font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-align: center;
-  margin-bottom: 6px;
-}
-.tally-count {
-  font-family: var(--font-heading);
-  font-size: 38px;
-  font-weight: 800;
-  color: var(--text-main);
-  line-height: 1;
-}
-
-/* Session Status Bar */
-.tally-status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--inner-radius);
-  padding: 14px 20px;
-  margin: 14px 0;
-}
-.tally-metric {
-  font-size: 15px;
-  font-weight: 600;
-}
-.tally-metric b {
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--brand-green);
-}
-
-/* Results & Tables */
-.table-wrap {
-  overflow-x: auto;
-  border-radius: var(--inner-radius);
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-surface);
-  margin: 12px 0;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
-  white-space: nowrap;
-}
-th, td {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border-subtle);
-  text-align: right;
-}
-th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) {
-  text-align: left;
-}
-th {
-  background: var(--bg-subtle);
-  color: var(--text-muted);
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-tfoot td {
-  font-weight: 800;
-  background: var(--bg-subtle);
-  color: var(--text-main);
-}
-
-/* Key-Value Summary List */
-.kv-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border-subtle);
-  font-size: 14.5px;
-}
-.kv-row:last-child {
-  border-bottom: none;
-}
-.kv-label {
-  color: var(--text-muted);
-  font-weight: 500;
-}
-.kv-value {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-/* Chart Canvas Container */
-.chart-box {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  padding: 20px;
-  margin: 14px 0;
-  box-shadow: var(--shadow-sm);
-}
-.chart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-.chart-title {
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-main);
-}
-.chart-inner {
-  height: 260px;
-  position: relative;
-}
-
-/* Step Flow Procedure */
-.wise-procedure {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 16px 0 8px;
-}
-.procedure-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 16px;
-  border-radius: var(--inner-radius);
-  background: var(--bg-subtle);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  border: 1px solid transparent;
-}
-.procedure-step:hover {
-  background: var(--bg-surface);
-  border-color: var(--border-subtle);
-  box-shadow: var(--shadow-sm);
-}
-.step-num {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--pill-radius);
-  background: var(--brand-green);
-  color: #163300;
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.step-info b {
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-main);
-  display: block;
-  margin-bottom: 4px;
-}
-.step-info div {
-  font-size: 13.5px;
-  color: var(--text-muted);
-  line-height: 1.45;
-}
-
-/* Notice / Banner */
-.wise-banner {
-  background: var(--bg-subtle);
-  border-left: 4px solid var(--brand-green);
-  padding: 14px 18px;
-  border-radius: 0 var(--inner-radius) var(--inner-radius) 0;
-  font-size: 13.5px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-.wise-banner.warning {
-  border-left-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
-  color: var(--text-main);
-}
-
-.footer-note {
-  text-align: center;
-  font-size: 13px;
-  color: var(--text-subtle);
-  margin-top: 18px;
-}
-
-/* Protective Confirmation Dialog Modal */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(14, 18, 15, 0.72);
-  backdrop-filter: blur(6px);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.modal-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-.modal-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--card-radius);
-  max-width: 440px;
-  width: 100%;
-  padding: 28px 24px;
-  box-shadow: var(--shadow-md);
-  transform: scale(0.96) translateY(10px);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.modal-overlay.active .modal-card {
-  transform: scale(1) translateY(0);
-}
-.modal-icon-badge {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--danger-bg);
-  color: var(--danger);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-bottom: 4px;
-}
-.modal-title {
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text-main);
-  margin: 0;
-}
-.modal-body {
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--text-muted);
-  margin: 0;
-}
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-}
-.modal-actions .btn {
-  flex: 1;
-}
+  display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: var(--pill-radius);
+  color: var(--text-main); text-decoration: none; font-family: var(--font-heading); font-weight: 600; font-size: 15px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+}
+.dr a:hover { background: var(--bg-subtle); }
+.dr a.on { background: var(--brand-green); color: #163300; }
+.dr-meta { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-subtle); display: flex; flex-direction: column; gap: 4px; }
+.wise-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); padding: 24px; box-shadow: var(--shadow-sm); }
+.wise-card-title { font-family: var(--font-heading); font-size: 20px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 16px; display: flex; align-items: center; gap: 10px; }
+.wise-card-subtitle { color: var(--text-muted); font-size: 14.5px; line-height: 1.5; margin: -8px 0 18px; }
+.wise-hero { background: linear-gradient(145deg, var(--bg-surface) 0%, var(--bg-subtle) 100%); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); padding: 32px 28px; box-shadow: var(--shadow-md); position: relative; overflow: hidden; }
+.wise-hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--brand-green); color: #163300; font-family: var(--font-heading); font-weight: 700; font-size: 12px; padding: 6px 12px; border-radius: var(--pill-radius); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+.wise-hero h1 { font-family: var(--font-heading); font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 12px; }
+.wise-hero p { color: var(--text-muted); font-size: 16px; line-height: 1.55; margin: 0 0 24px; max-width: 540px; }
+.hero-visual-card { background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--inner-radius); padding: 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-around; gap: 12px; }
+.lane-pill { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--text-muted); background: var(--bg-subtle); padding: 8px 14px; border-radius: var(--pill-radius); }
+.btn { font-family: var(--font-heading); font-weight: 700; font-size: 15px; padding: 14px 24px; border-radius: var(--pill-radius); border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: all 0.15s ease; user-select: none; }
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--brand-green); color: #163300; box-shadow: 0 4px 14px rgba(159, 232, 112, 0.25); }
+.btn-primary:hover { background: var(--brand-green-hover); }
+.btn-secondary { background: var(--bg-subtle); color: var(--text-main); border-color: var(--border-subtle); }
+.btn-secondary:hover { background: var(--border-subtle); }
+.btn-outline-action { background: transparent; color: var(--text-main); border: 1.5px solid var(--border-strong); }
+.btn-outline-action:hover { background: var(--bg-subtle); border-color: var(--brand-green); }
+.btn-danger { background: var(--danger-bg); color: var(--danger-text); }
+.btn-danger:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-block { width: 100%; }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-group .btn { flex: 1; min-width: 140px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+label { font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+input, select, textarea { width: 100%; font-family: var(--font-main); font-size: 15px; font-weight: 500; color: var(--text-main); background: var(--bg-subtle); border: 1.5px solid var(--border-subtle); border-radius: var(--inner-radius); padding: 13px 16px; outline: none; transition: border-color 0.15s ease; }
+input:focus, select:focus, textarea:focus { border-color: var(--brand-green); background: var(--bg-surface); }
+input:disabled, select:disabled { opacity: 0.55; cursor: not-allowed; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.switch-row { display: flex; align-items: center; justify-content: space-between; background: var(--bg-subtle); padding: 14px 18px; border-radius: var(--inner-radius); margin: 12px 0; cursor: pointer; }
+.switch-label { font-weight: 700; font-size: 15px; color: var(--text-main); }
+.switch-input { width: 20px; height: 20px; accent-color: #163300; cursor: pointer; }
+.tally-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.tally-pad { background: var(--bg-surface); border: 2px solid var(--border-subtle); border-radius: var(--card-radius); padding: 22px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.12s ease; user-select: none; box-shadow: var(--shadow-sm); }
+.tally-pad:hover { border-color: var(--brand-green); }
+.tally-pad:active { transform: scale(0.96); background: var(--brand-green); border-color: var(--brand-green); }
+.tally-pad:active .tally-name, .tally-pad:active .tally-count { color: #163300 !important; }
+.tally-name { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--text-muted); text-align: center; margin-bottom: 6px; }
+.tally-count { font-family: var(--font-heading); font-size: 38px; font-weight: 800; color: var(--text-main); line-height: 1; }
+.tally-status-bar { display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--inner-radius); padding: 14px 20px; margin: 14px 0; }
+.tally-metric { font-size: 15px; font-weight: 600; }
+.tally-metric b { font-family: var(--font-heading); font-size: 20px; font-weight: 800; color: var(--brand-green); }
+.table-wrap { overflow-x: auto; border-radius: var(--inner-radius); border: 1px solid var(--border-subtle); background: var(--bg-surface); margin: 12px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; white-space: nowrap; }
+th, td { padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); text-align: right; }
+th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+th { background: var(--bg-subtle); color: var(--text-muted); font-family: var(--font-heading); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+tfoot td { font-weight: 800; background: var(--bg-subtle); color: var(--text-main); }
+.kv-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); font-size: 14.5px; }
+.kv-row:last-child { border-bottom: none; }
+.kv-label { color: var(--text-muted); font-weight: 500; }
+.kv-value { font-family: var(--font-heading); font-weight: 700; color: var(--text-main); }
+.chart-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); padding: 24px; margin: 18px 0; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: center; }
+.chart-header { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 18px; }
+.chart-title { font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: var(--text-main); }
+.chart-inner { height: 380px; width: 100%; max-width: 600px; position: relative; display: flex; justify-content: center; align-items: center; }
+.wise-procedure { display: flex; flex-direction: column; gap: 12px; margin: 16px 0 8px; }
+.procedure-step { display: flex; align-items: flex-start; gap: 16px; padding: 16px; border-radius: var(--inner-radius); background: var(--bg-subtle); cursor: pointer; transition: all 0.15s ease; border: 1px solid transparent; }
+.procedure-step:hover { background: var(--bg-surface); border-color: var(--border-subtle); box-shadow: var(--shadow-sm); }
+.step-num { width: 32px; height: 32px; border-radius: var(--pill-radius); background: var(--brand-green); color: #163300; font-family: var(--font-heading); font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-info b { font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px; }
+.step-info div { font-size: 13.5px; color: var(--text-muted); line-height: 1.45; }
+.wise-banner { background: var(--bg-subtle); border-left: 4px solid var(--brand-green); padding: 14px 18px; border-radius: 0 var(--inner-radius) var(--inner-radius) 0; font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+.wise-banner.warning { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.1); color: var(--text-main); }
+.footer-note { text-align: center; font-size: 13px; color: var(--text-subtle); margin-top: 18px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(14, 18, 15, 0.72); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); max-width: 440px; width: 100%; padding: 28px 24px; box-shadow: var(--shadow-md); transform: scale(0.96) translateY(10px); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; gap: 16px; }
+.modal-overlay.active .modal-card { transform: scale(1) translateY(0); }
+.modal-icon-badge { width: 48px; height: 48px; border-radius: 50%; background: var(--danger-bg); color: var(--danger); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-bottom: 4px; }
+.modal-title { font-family: var(--font-heading); font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-main); margin: 0; }
+.modal-body { font-size: 14.5px; line-height: 1.55; color: var(--text-muted); margin: 0; }
+.modal-actions { display: flex; gap: 10px; margin-top: 8px; }
+.modal-actions .btn { flex: 1; }
 </style>
 </head>
 <body>
 <div class="app-container">
-<!-- Header Bar with Wise Pill Styling -->
 <header class="header-bar">
 <div class="brand-badge">
 <div class="brand-icon">
-<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24" width="18"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="18"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
 </div>
 <span id="pt">Overview</span>
 </div>
@@ -815,11 +186,11 @@ tfoot td {
 <span id="theme-icon">☀️</span> <span id="theme-text">Light</span>
 </button>
 <button aria-label="Open menu" class="btn-menu-pill" id="menu">
-<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20"><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
 </button>
 </div>
 </header>
-<!-- Slide-out Drawer (Navigation) -->
+
 <div class="ov" id="ov"></div>
 <nav class="dr" id="dr">
 <div class="dr-header">
@@ -827,66 +198,41 @@ tfoot td {
 <button aria-label="Close menu" class="btn-menu-pill" id="dr-close">✕</button>
 </div>
 <div class="dr-links">
-<a data-t="home">
-<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        Home
-      </a>
-<a data-t="setup">
-<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        Setup
-      </a>
-<a data-t="count">
-<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        Count
-      </a>
-<a data-t="res">
-<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
-        Results
-      </a>
-<a data-t="imp">
-<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" x2="12" y1="3" y2="15"></line></svg>
-        Import
-      </a>
+<a data-t="home"><svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home</a>
+<a data-t="setup"><svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg> Setup</a>
+<a data-t="count"><svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><circle cx="12" cy="12" r="3"></circle></svg> Count</a>
+<a data-t="res"><svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg> Results</a>
+<a data-t="imp"><svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" x2="12" y1="3" y2="15"></line></svg> Import</a>
 </div>
-<div class="dr-meta">
-<b>Traffic Survey Tool</b>
-<span>On-device local storage</span>
-</div>
+<div class="dr-meta"><b>Traffic Survey Tool</b><span>On-device local storage</span></div>
 </nav>
-<!-- Sections -->
+
 <main id="home"></main>
 <main hidden="" id="setup"></main>
 <main hidden="" id="count"></main>
 <main hidden="" id="res"></main>
 <main hidden="" id="imp"></main>
 </div>
-<!-- Protective Confirmation Modal -->
+
 <div aria-modal="true" class="modal-overlay" id="confirm-modal" role="dialog">
 <div class="modal-card">
 <div class="modal-icon-badge">
-<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24" width="24">
-<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-<line x1="12" x2="12" y1="9" y2="13"></line>
-<line x1="12" x2="12.01" y1="17" y2="17"></line>
-</svg>
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24" width="24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" x2="12" y1="9" y2="13"></line><line x1="12" x2="12.01" y1="17" y2="17"></line></svg>
 </div>
 <h2 class="modal-title" id="modal-title">Start a new survey?</h2>
-<p class="modal-body" id="modal-desc">
-      This will permanently erase all recorded counts, vehicle classes, directions, and imported data on this device. This action cannot be undone.
-    </p>
+<p class="modal-body" id="modal-desc">This will permanently erase all recorded counts, vehicle classes, directions, and imported data on this device. This action cannot be undone.</p>
 <div class="modal-actions">
 <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
 <button class="btn btn-danger" id="modal-confirm" style="background:var(--danger); color:#ffffff; font-weight:800;">Confirm &amp; Reset</button>
 </div>
 </div>
 </div>
+
 <script>
-// ---------- CORE APP STATE & STORAGE ----------
-const KEY = "trafficTool5", $ = id => document.getElementById(id);
+const KEY = "trafficTool6", $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const q = s => '"' + String(s).replace(/"/g, '""') + '"';
 
-// Clean, unpopulated initial state without hardcoded dummy values; 1 direction approach available by default
 const def = () => ({
   cls: [],
   dirs: [{name: ""}],
@@ -894,7 +240,6 @@ const def = () => ({
   end: "",
   iv: 15,
   usePce: false,
-  who: "",
   date: "",
   cur: {d: 0, s: 0},
   log: [],
@@ -908,29 +253,19 @@ const def = () => ({
 let S = def(), SL = [], A = [], MSG = [], PEND = null;
 try {
   const r = localStorage.getItem(KEY);
-  if (r) {
-    const loaded = JSON.parse(r);
-    Object.assign(S, loaded);
-  }
+  if (r) Object.assign(S, JSON.parse(r));
 } catch(e) {}
-if (!Array.isArray(S.dirs) || S.dirs.length === 0) {
-  S.dirs = [{name: ""}];
-}
+if (!Array.isArray(S.dirs) || S.dirs.length === 0) S.dirs = [{name: ""}];
 
-// Read URL hash on initial load or fallback
 const validTabs = ["home", "setup", "count", "res", "imp"];
 const initialHash = (location.hash || "").replace("#", "");
-if (validTabs.includes(initialHash)) {
-  S.tab = initialHash;
-} else if (!validTabs.includes(S.tab)) {
-  S.tab = "home";
-}
+if (validTabs.includes(initialHash)) S.tab = initialHash;
+else if (!validTabs.includes(S.tab)) S.tab = "home";
 
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} };
 const dn = i => (S.dirs[i] && S.dirs[i].name && S.dirs[i].name.trim()) || "Direction " + (i + 1);
 const cn = i => (S.cls[i] && S.cls[i].name && S.cls[i].name.trim()) || "Class " + (i + 1);
 const locked = () => Object.keys(S.data).length > 0;
-const hasSurveyData = () => Object.keys(S.data).length > 0 || (S.cls && S.cls.length > 0) || (S.log && S.log.length > 0) || (S.dirs && S.dirs.some(d => d.name && d.name.trim() !== ""));
 const tm = m => {
   m = ((m % 1440) + 1440) % 1440;
   return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
@@ -951,26 +286,27 @@ function slots(st = S.start, en = S.end, iv = S.iv) {
 }
 
 const sum = v => (v || []).reduce((a, b) => a + (b || 0), 0);
-const pcu = v => (v || []).reduce((a, n, i) => {
-  const f = S.cls[i] && S.cls[i].pce !== "" && !isNaN(+S.cls[i].pce) ? +S.cls[i].pce : 0;
-  return a + (n || 0) * f;
-}, 0);
-const meas = v => S.usePce ? pcu(v) : sum(v);
-const UN = () => S.usePce ? "PCE" : "vehicles";
+const getPceFactor = (i) => {
+  if (!S.usePce) return 1.0;
+  const c = S.cls[i];
+  if (c && c.pce !== "" && !isNaN(+c.pce)) return +c.pce;
+  return 1.0;
+};
+const pcu = v => (v || []).reduce((a, n, i) => a + (n || 0) * getPceFactor(i), 0);
+const meas = v => pcu(v);
+const UN = () => "PCU";
 const pceMissing = () => S.usePce ? S.cls.map((c, i) => !(c && c.pce !== "" && !isNaN(+c.pce) && +c.pce > 0) ? cn(i) : null).filter(Boolean) : [];
 const key = () => S.cur.d + "|" + S.cur.s;
 const dl = (name, text) => {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([text], {type: "text/csv"}));
-  a.download = name;
-  a.click();
+  a.download = name; a.click();
 };
 function rowsList() {
   return Object.keys(S.data).map(k => k.split("|").map(Number)).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(([d, s]) => ({d, s, v: S.data[d + "|" + s]}));
 }
-const pmWarn = () => pceMissing().length ? '<div class="wise-banner warning"><b>PCE Attention:</b> Factor not set for: ' + esc(pceMissing().join(", ")) + '. Configure them in Setup, or they count as 0.</div>' : "";
+const pmWarn = () => pceMissing().length ? '<div class="wise-banner warning"><b>PCE Attention:</b> Factor not set for: ' + esc(pceMissing().join(", ")) + '. Default factor of 1.0 PCU applied.</div>' : "";
 
-/* ---------- CENTRALIZED PROTECTIVE CONFIRMATION MODAL ---------- */
 let onConfirmResetCallback = null;
 function openResetModal(callback) {
   onConfirmResetCallback = callback;
@@ -983,31 +319,22 @@ function closeResetModal() {
   onConfirmResetCallback = null;
 }
 $("modal-cancel").onclick = closeResetModal;
-$("confirm-modal").onclick = e => {
-  if (e.target.id === "confirm-modal") closeResetModal();
-};
+$("confirm-modal").onclick = e => { if (e.target.id === "confirm-modal") closeResetModal(); };
 $("modal-confirm").onclick = () => {
   if (typeof onConfirmResetCallback === "function") {
     const cb = onConfirmResetCallback;
-    closeResetModal();
-    cb();
+    closeResetModal(); cb();
   } else {
-    // Default complete reset of all survey state
-    closeResetModal();
-    resetEntireSurvey();
+    closeResetModal(); resetEntireSurvey();
   }
 };
 
 function resetEntireSurvey(targetTab = "home") {
-  S = def();
-  S.tab = targetTab;
-  S.surveyStarted = false;
+  S = def(); S.tab = targetTab; S.surveyStarted = false;
   try { localStorage.removeItem(KEY); } catch(e) {}
-  save();
-  go(targetTab, false);
+  save(); go(targetTab, false);
 }
 
-/* ---------- THEME TOGGLE (DARK / LIGHT) ---------- */
 function initTheme() {
   const isDark = document.documentElement.classList.contains("dark");
   updateThemeButton(isDark);
@@ -1015,7 +342,7 @@ function initTheme() {
 function toggleTheme() {
   const isDark = document.documentElement.classList.toggle("dark");
   updateThemeButton(isDark);
-  if (S.tab === "res") renderRes(); // Refresh Chart colors cleanly
+  if (S.tab === "res") renderRes();
 }
 function updateThemeButton(isDark) {
   const ic = $("theme-icon"), tx = $("theme-text");
@@ -1026,29 +353,19 @@ function updateThemeButton(isDark) {
 }
 $("theme-btn").onclick = toggleTheme;
 
-/* ---------- NAVIGATION & BROWSER/PHONE BACK BUTTON INTEGRATION ---------- */
 const PT = {home: "Overview", setup: "Survey Setup", count: "Field Counter", res: "Results & Insights", imp: "Import Data"};
 
 function go(t, push = true) {
-  MSG = []; PEND = null;
-  S.tab = t;
+  MSG = []; PEND = null; S.tab = t;
   document.body.classList.remove("open");
-  if (push) {
-    history.pushState({ tab: t }, '', '#' + t);
-  }
-  save();
-  render();
-  window.scrollTo({top: 0, behavior: "smooth"});
+  if (push) history.pushState({ tab: t }, '', '#' + t);
+  save(); render(); window.scrollTo({top: 0, behavior: "smooth"});
 }
 
-// Synchronize browser history and phone back button
 window.addEventListener("popstate", e => {
   const targetTab = (e.state && e.state.tab) || (location.hash ? location.hash.replace("#", "") : "home");
-  if (validTabs.includes(targetTab)) {
-    go(targetTab, false);
-  } else {
-    go("home", false);
-  }
+  if (validTabs.includes(targetTab)) go(targetTab, false);
+  else go("home", false);
 });
 
 function render() {
@@ -1072,19 +389,13 @@ document.addEventListener("click", e => {
   }
 });
 
-/* ---------- HOME SCREEN ---------- */
 function renderHome() {
-  const L = locked();
-  const hasData = hasSurveyData();
-  const showOptions = S.surveyStarted || L;
-
+  const L = locked(), showOptions = S.surveyStarted || L;
   $("home").innerHTML = `
   <div class="wise-hero">
     <div class="wise-hero-badge">Traffic Survey</div>
     <h1>Vehicle Volume &amp; Flow Survey</h1>
-    <p>Classified vehicle counting tool with interval logging, PCE conversions, and peak hour factor analysis.</p>
-
-    <!-- Visual Traffic Element -->
+    <p>Classified vehicle counting tool with interval logging, PCU conversions, and peak hour factor analysis.</p>
     <div class="hero-visual-card">
       <div class="lane-pill">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.5 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
@@ -1092,18 +403,15 @@ function renderHome() {
       </div>
       <div class="lane-pill">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span>PCE Factors</span>
+        <span>PCU Weighted</span>
       </div>
       <div class="lane-pill">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        <span>Peak Hour &amp; PHF</span>
+        <span>Peak Hour &amp; PHF (≤30m)</span>
       </div>
     </div>
-
     ${!showOptions ? `
-      <div>
-        <button class="btn btn-primary btn-block" id="begin-survey-btn" style="font-size:16px; padding:16px 28px;">Begin Survey</button>
-      </div>
+      <div><button class="btn btn-primary btn-block" id="begin-survey-btn" style="font-size:16px; padding:16px 28px;">Begin Survey</button></div>
     ` : `
       <div class="btn-group">
         ${L ? `
@@ -1117,109 +425,63 @@ function renderHome() {
       </div>
     `}
   </div>
-
   <div class="wise-card">
     <div class="wise-card-title">Survey procedure</div>
     <div class="wise-card-subtitle">Steps to complete a count:</div>
     <div class="wise-procedure">
       <div class="procedure-step" data-go="setup" data-path="count">
         <div class="step-num">1</div>
-        <div class="step-info">
-          <b>Setup</b>
-          <div>Configure survey duration, interval slices (15, 30, or 60 min), road approaches, and vehicle classes.</div>
-        </div>
+        <div class="step-info"><b>Setup</b><div>Configure survey duration, interval slices (15, 30, or 60 min), road approaches, and vehicle classes.</div></div>
       </div>
       <div class="procedure-step" data-go="count" data-path="count">
         <div class="step-num">2</div>
-        <div class="step-info">
-          <b>Count</b>
-          <div>Log vehicles by category per interval. Data saves automatically in your browser.</div>
-        </div>
+        <div class="step-info"><b>Count</b><div>Log vehicles by category per interval. Data saves automatically in your browser.</div></div>
       </div>
       <div class="procedure-step" data-go="res">
         <div class="step-num">3</div>
-        <div class="step-info">
-          <b>Results &amp; Export</b>
-          <div>View Peak Hour Volume (PHV), Peak Hour Factor (PHF), composition charts, and export CSV data.</div>
-        </div>
+        <div class="step-info"><b>Results &amp; Export</b><div>View Peak Hour Volume (PHV in PCU/h), Peak Hour Factor (PHF), composition charts, and export reports.</div></div>
       </div>
     </div>
   </div>
-
   <div class="wise-card">
     <div class="wise-card-title">Outputs</div>
     <div class="kv-row"><span class="kv-label">Classified tallies</span><span class="kv-value">Discrete intervals (15, 30, or 60 min)</span></div>
-    <div class="kv-row"><span class="kv-label">PCE conversion</span><span class="kv-value">Passenger car equivalent factors</span></div>
-    <div class="kv-row"><span class="kv-label">Peak detection</span><span class="kv-value">Peak Hour Volume (PHV) &amp; PHF</span></div>
-    <div class="kv-row"><span class="kv-label">Export options</span><span class="kv-value">CSV data tables &amp; PNG charts</span></div>
+    <div class="kv-row"><span class="kv-label">PCU conversion</span><span class="kv-value">Passenger car equivalent factors</span></div>
+    <div class="kv-row"><span class="kv-label">Peak detection</span><span class="kv-value">Highest PCU Volume (PHV) &amp; PHF (≤30m)</span></div>
+    <div class="kv-row"><span class="kv-label">Export options</span><span class="kv-value">CSV data tables &amp; Clean PDF Report</span></div>
   </div>
-
-  <div class="footer-note">
-    Data is stored locally in your browser.
-  </div>
+  <div class="footer-note">Data is stored locally in your browser.</div>
   `;
 }
 
 $("home").addEventListener("click", e => {
   if (e.target.closest("#begin-survey-btn")) {
-    // Cleanly clear prior survey state behind the scenes without dialog/banner
-    S = def();
-    S.tab = "home";
-    S.surveyStarted = true;
+    S = def(); S.tab = "home"; S.surveyStarted = true;
     try { localStorage.removeItem(KEY); } catch(x) {}
-    save();
-    renderHome();
-    return;
-  }
-  if (e.target.closest("#home-reset")) {
-    openResetModal(() => resetEntireSurvey("home"));
+    save(); renderHome();
   }
 });
 
-/* ---------- SETUP SCREEN ---------- */
 function renderSetup() {
   const L = locked(), dis = L ? "disabled" : "", P = S.usePce;
   $("setup").innerHTML = `
   <div class="wise-card">
     <div class="wise-card-title">Survey Parameters</div>
     <div class="grid-2">
-      <div class="form-group">
-        <label>Survey Date</label>
-        <input type="date" data-k="date" value="${S.date || ""}">
-      </div>
-      <div class="form-group">
-        <label>Counting Interval</label>
-        <select data-k="iv" ${dis}>
-          ${[15, 30, 60].map(n => `<option value="${n}" ${S.iv === n ? "selected" : ""}>${n === 60 ? "Hourly intervals (60m)" : n + " minutes"}</option>`).join("")}
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Start Time</label>
-        <input type="time" data-k="start" value="${S.start || ""}" placeholder="--:--" ${dis}>
-      </div>
-      <div class="form-group">
-        <label>End Time</label>
-        <input type="time" data-k="end" value="${S.end || ""}" placeholder="--:--" ${dis}>
-      </div>
+      <div class="form-group"><label>Survey Date</label><input type="date" data-k="date" value="${S.date || ""}"></div>
+      <div class="form-group"><label>Counting Interval</label><select data-k="iv" ${dis}>${[15, 30, 60].map(n => `<option value="${n}" ${S.iv === n ? "selected" : ""}>${n === 60 ? "Hourly intervals (60m)" : n + " minutes"}</option>`).join("")}</select></div>
+      <div class="form-group"><label>Start Time</label><input type="time" data-k="start" value="${S.start || ""}" placeholder="--:--" ${dis}></div>
+      <div class="form-group"><label>End Time</label><input type="time" data-k="end" value="${S.end || ""}" placeholder="--:--" ${dis}></div>
     </div>
     <div class="wise-banner" id="sinfo" style="margin-bottom:0"></div>
     ${L ? '<div class="wise-banner warning" style="margin-top:10px">Survey timeline locked because active tallies exist. Clear or finish survey to re-adjust.</div>' : ""}
   </div>
-
   <div class="wise-card">
     <div class="wise-card-title">Vehicle Classes</div>
-    <label class="switch-row">
-      <span class="switch-label">Enable Passenger Car Equivalent (PCE)</span>
-      <input type="checkbox" class="switch-input" data-k="usePce" ${P ? "checked" : ""}>
-    </label>
-    <div class="wise-card-subtitle" style="margin-top:6px">
-      ${P ? "Enter a specific PCE multiplier for each vehicle classification." : "Counts are tallied 1:1 per vehicle. Turn on PCE to weight heavy vehicles and buses."}
-    </div>
-
+    <label class="switch-row"><span class="switch-label">Enable Passenger Car Equivalent (PCE)</span><input type="checkbox" class="switch-input" data-k="usePce" ${P ? "checked" : ""}></label>
+    <div class="wise-card-subtitle" style="margin-top:6px">${P ? "Enter a specific PCE multiplier for each vehicle classification." : "PCE is disabled (all vehicles default to 1.0 PCU). Turn on PCE to configure custom multipliers."}</div>
     <div id="cls-list" style="display:flex; flex-direction:column; gap:8px;">
-      ${S.cls.length === 0 ? `
-        <div class="wise-card-subtitle" style="margin:4px 0 8px; color:var(--text-subtle);">No vehicle classes added yet. Click below to add classes (e.g. Sedan, Truck, Bus).</div>
-      ` : S.cls.map((c, i) => `
+      ${S.cls.length === 0 ? `<div class="wise-card-subtitle" style="margin:4px 0 8px; color:var(--text-subtle);">No vehicle classes added yet. Click below to add classes.</div>` : S.cls.map((c, i) => `
         <div style="display:grid; grid-template-columns: ${P ? "1fr 90px 44px" : "1fr 44px"}; gap: 8px; align-items:center;">
           <input placeholder="e.g. Sedan / Car" data-c="name" data-i="${i}" value="${esc(c.name || "")}">
           ${P ? `<input type="number" step="any" min="0" placeholder="PCE" data-c="pce" data-i="${i}" value="${c.pce !== undefined && c.pce !== null ? esc(c.pce) : ""}">` : ""}
@@ -1229,14 +491,11 @@ function renderSetup() {
     </div>
     <button class="btn btn-secondary" style="margin-top:14px; width:100%" data-add="c">+ Add vehicle class</button>
   </div>
-
   <div class="wise-card">
     <div class="wise-card-title">Approaches & Directions</div>
     <div class="wise-card-subtitle">Define roadway directions (e.g. Northbound, Southbound, or Eastbound).</div>
     <div id="dirs-list" style="display:flex; flex-direction:column; gap:8px;">
-      ${S.dirs.length === 0 ? `
-        <div class="wise-card-subtitle" style="margin:4px 0 8px; color:var(--text-subtle);">No directions defined yet. Click below to add survey approaches.</div>
-      ` : S.dirs.map((d, i) => `
+      ${S.dirs.length === 0 ? `<div class="wise-card-subtitle" style="margin:4px 0 8px; color:var(--text-subtle);">No directions defined yet. Click below to add survey approaches.</div>` : S.dirs.map((d, i) => `
         <div style="display:grid; grid-template-columns: 1fr 44px; gap:8px; align-items:center;">
           <input placeholder="e.g. Northbound" data-d="name" data-i="${i}" value="${esc(d.name || "")}">
           <button class="btn btn-secondary btn-danger" style="padding:10px; height:46px;" data-rm="d" data-i="${i}" ${(L || S.dirs.length <= 1) ? "disabled" : ""}>✕</button>
@@ -1245,35 +504,19 @@ function renderSetup() {
     </div>
     <button class="btn btn-secondary" style="margin-top:14px; width:100%" data-add="d">+ Add direction approach</button>
   </div>
-
   <div class="btn-group">
-    ${S.path === "imp" ? `
-      <button class="btn btn-primary" data-go="res">View results</button>
-      <button class="btn btn-secondary" data-go="imp">Back to Import</button>
-    ` : `
-      <button class="btn btn-primary" data-go="count">Go to Live Counter</button>
-      <button class="btn btn-secondary" data-go="imp" data-path="imp">Import CSV files</button>
-    `}
+    ${S.path === "imp" ? `<button class="btn btn-primary" data-go="res">View results</button><button class="btn btn-secondary" data-go="imp">Back to Import</button>` : `<button class="btn btn-primary" data-go="count">Go to Live Counter</button><button class="btn btn-secondary" data-go="imp" data-path="imp">Import CSV files</button>`}
   </div>
-
-  <button class="btn btn-danger btn-block" id="newsv" style="margin-top:10px;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-    Start a new survey (Clear All)
-  </button>
+  <button class="btn btn-danger btn-block" id="newsv" style="margin-top:10px;">Start a new survey (Clear All)</button>
   `;
   sinfo();
 }
 
 function sinfo() {
-  const el = $("sinfo");
-  if (!el) return;
-  if (!S.start || !S.end) {
-    el.textContent = "Specify start and end times to generate counting sessions.";
-  } else if (SL.length) {
-    el.textContent = `Configured for ${SL.length} time sessions of ${S.iv} minutes each.`;
-  } else {
-    el.textContent = "End time must be after start time.";
-  }
+  const el = $("sinfo"); if (!el) return;
+  if (!S.start || !S.end) el.textContent = "Specify start and end times to generate counting sessions.";
+  else if (SL.length) el.textContent = `Configured for ${SL.length} time sessions of ${S.iv} minutes each.`;
+  else el.textContent = "End time must be after start time.";
 }
 
 $("setup").addEventListener("input", e => {
@@ -1286,22 +529,13 @@ $("setup").addEventListener("input", e => {
 });
 
 $("setup").addEventListener("click", e => {
-  const t = e.target.closest("button");
-  if (!t) return;
-  if (t.id === "newsv") {
-    openResetModal(() => resetEntireSurvey("home"));
-    return;
-  }
-  if (t.dataset.add === "c") {
-    S.cls.push({name: "", pce: ""});
-  } else if (t.dataset.add === "d") {
-    S.dirs.push({name: ""});
-  } else if (t.dataset.rm === "c") {
-    S.cls.splice(+t.dataset.i, 1);
-  } else if (t.dataset.rm === "d") {
-    removeDirection(+t.dataset.i);
-    return;
-  } else return;
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.id === "newsv") { openResetModal(() => resetEntireSurvey("home")); return; }
+  if (t.dataset.add === "c") S.cls.push({name: "", pce: ""});
+  else if (t.dataset.add === "d") S.dirs.push({name: ""});
+  else if (t.dataset.rm === "c") S.cls.splice(+t.dataset.i, 1);
+  else if (t.dataset.rm === "d") { removeDirection(+t.dataset.i); return; }
+  else return;
   save(); renderSetup();
 });
 
@@ -1312,64 +546,36 @@ function removeDirection(idx) {
   for (const k in S.data) {
     const [d, s] = k.split("|").map(Number);
     if (d === idx) continue;
-    const newD = d > idx ? d - 1 : d;
-    remappedData[newD + "|" + s] = S.data[k];
+    remappedData[(d > idx ? d - 1 : d) + "|" + s] = S.data[k];
   }
   S.data = remappedData;
-  S.log = S.log.filter(l => l.d !== idx).map(l => ({
-    ...l,
-    d: l.d > idx ? l.d - 1 : l.d
-  }));
-  S.hist = S.hist.filter(h => {
-    const d = Number(h[0].split("|")[0]);
-    return d !== idx;
-  }).map(h => {
+  S.log = S.log.filter(l => l.d !== idx).map(l => ({ ...l, d: l.d > idx ? l.d - 1 : l.d }));
+  S.hist = S.hist.filter(h => Number(h[0].split("|")[0]) !== idx).map(h => {
     const [d, s] = h[0].split("|").map(Number);
-    const newD = d > idx ? d - 1 : d;
-    return [newD + "|" + s, h[1]];
+    return [(d > idx ? d - 1 : d) + "|" + s, h[1]];
   });
   if (S.cur.d >= S.dirs.length) S.cur.d = Math.max(0, S.dirs.length - 1);
-  save();
-  render();
+  save(); render();
 }
 
-/* ---------- COUNT SCREEN ---------- */
 function renderCount() {
   if (!SL.length || !S.cls.length || !S.dirs.length) {
-    const missing = [];
-    if (!S.start || !S.end || !SL.length) missing.push("valid survey start & end times");
-    if (!S.dirs.length) missing.push("at least one direction approach");
-    if (!S.cls.length) missing.push("at least one vehicle category");
-
     $("count").innerHTML = `
       <div class="wise-card">
         <div class="wise-card-title">Setup Required</div>
-        <p class="wise-card-subtitle">Before tallying, please configure: <b>${missing.join(", ")}</b>.</p>
+        <p class="wise-card-subtitle">Before tallying, please configure valid times, directions, and vehicle categories.</p>
         <button class="btn btn-primary" data-go="setup" data-path="count">Open Setup</button>
       </div>
     `;
     return;
   }
-
   $("count").innerHTML = pmWarn() + `
   <div class="wise-card">
     <div class="grid-2">
-      <div class="form-group">
-        <label>Active Direction</label>
-        <select data-s="d">${S.dirs.map((d, i) => `<option value="${i}">${esc(dn(i))}</option>`).join("")}</select>
-      </div>
-      <div class="form-group">
-        <label>Survey Session Window</label>
-        <div style="display:flex; gap:6px;">
-          <button class="btn btn-secondary" style="padding:10px 14px;" data-a="prev">◀</button>
-          <select data-s="s" style="margin:0">${SL.map((s, i) => `<option value="${i}">${s}</option>`).join("")}</select>
-          <button class="btn btn-primary" style="padding:10px 14px;" data-a="next">▶</button>
-        </div>
-      </div>
+      <div class="form-group"><label>Active Direction</label><select data-s="d">${S.dirs.map((d, i) => `<option value="${i}">${esc(dn(i))}</option>`).join("")}</select></div>
+      <div class="form-group"><label>Survey Session Window</label><div style="display:flex; gap:6px;"><button class="btn btn-secondary" style="padding:10px 14px;" data-a="prev">◀</button><select data-s="s" style="margin:0">${SL.map((s, i) => `<option value="${i}">${s}</option>`).join("")}</select><button class="btn btn-primary" style="padding:10px 14px;" data-a="next">▶</button></div></div>
     </div>
   </div>
-
-  <!-- Big Tactile Clickers -->
   <div class="tally-grid">
     ${S.cls.map((c, i) => `
       <div class="tally-pad" data-tap="${i}">
@@ -1378,22 +584,11 @@ function renderCount() {
       </div>
     `).join("")}
   </div>
-
   <div class="tally-status-bar">
-    <div class="tally-metric">
-      <b id="tot">0</b> <span>vehicles this window</span>
-      ${S.usePce ? ' &bull; <b id="pce">0</b> <span>PCE</span>' : ''}
-    </div>
+    <div class="tally-metric"><b id="tot">0</b> <span>vehicles this window</span> &bull; <b id="pce">0</b> <span>PCU</span></div>
     <button class="btn btn-secondary" style="padding:8px 18px; font-size:13.5px;" data-a="undo">↶ Undo</button>
   </div>
-
-  <div class="wise-card">
-    <div class="wise-card-title">Live Tally Ledger</div>
-    <div class="table-wrap">
-      <table id="tbl"></table>
-    </div>
-  </div>
-
+  <div class="wise-card"><div class="wise-card-title">Live Tally Ledger</div><div class="table-wrap"><table id="tbl"></table></div></div>
   <div class="wise-card">
     <div class="btn-group">
       <button class="btn btn-primary" data-a="dl">Download CSV</button>
@@ -1402,10 +597,8 @@ function renderCount() {
     </div>
     <textarea id="csv" style="display:none; margin-top:12px; height:100px;" readonly></textarea>
   </div>
-
-  <button class="btn btn-primary btn-block" data-go="res">Analyze & View Results</button>
+  <button class="btn btn-primary btn-block" data-go="res">Analyze &amp; View Results</button>
   `;
-
   $("count").querySelector('[data-s="d"]').value = S.cur.d;
   $("count").querySelector('[data-s="s"]').value = S.cur.s;
   tally();
@@ -1414,10 +607,7 @@ function renderCount() {
 function tally() {
   if (!$("tot")) return;
   const v = S.data[key()] || [];
-  S.cls.forEach((c, i) => {
-    const n = $("n" + i);
-    if (n) n.textContent = v[i] || 0;
-  });
+  S.cls.forEach((c, i) => { const n = $("n" + i); if (n) n.textContent = v[i] || 0; });
   $("tot").textContent = sum(v);
   if ($("pce")) $("pce").textContent = pcu(v).toFixed(1);
 
@@ -1426,22 +616,21 @@ function tally() {
     $("tbl").innerHTML = "<tr><td class='wise-card-subtitle' style='text-align:center; padding:24px;'>No counts recorded yet. Tap vehicle cards above to start tallying.</td></tr>";
     return;
   }
-
-  let h = "<tr><th>Window</th><th>Direction</th>" + S.cls.map((c, i) => "<th>" + esc(cn(i)) + "</th>").join("") + "<th>Total</th>" + (S.usePce ? "<th>PCE</th>" : "") + "</tr>";
+  let h = "<tr><th>Window</th><th>Direction</th>" + S.cls.map((c, i) => "<th>" + esc(cn(i)) + "</th>").join("") + "<th>Vehicles</th><th>PCU</th></tr>";
   const tt = S.cls.map(() => 0);
   L.forEach(r => {
     S.cls.forEach((c, i) => tt[i] += r.v[i] || 0);
-    h += "<tr><td>" + (SL[r.s] || "Session " + (r.s + 1)) + "</td><td>" + esc(dn(r.d)) + "</td>" + S.cls.map((c, i) => "<td>" + (r.v[i] || "—") + "</td>").join("") + "<td><b>" + sum(r.v) + "</b></td>" + (S.usePce ? "<td>" + pcu(r.v).toFixed(1) + "</td>" : "") + "</tr>";
+    h += "<tr><td>" + (SL[r.s] || "Session " + (r.s + 1)) + "</td><td>" + esc(dn(r.d)) + "</td>" + S.cls.map((c, i) => "<td>" + (r.v[i] || "—") + "</td>").join("") + "<td>" + sum(r.v) + "</td><td><b>" + pcu(r.v).toFixed(1) + "</b></td></tr>";
   });
-  h += "<tfoot><tr><td>Total</td><td></td>" + tt.map(n => "<td>" + n + "</td>").join("") + "<td>" + sum(tt) + "</td>" + (S.usePce ? "<td>" + pcu(tt).toFixed(1) + "</td>" : "") + "</tr></tfoot>";
+  h += "<tfoot><tr><td>Total</td><td></td>" + tt.map(n => "<td>" + n + "</td>").join("") + "<td>" + sum(tt) + "</td><td>" + pcu(tt).toFixed(1) + "</td></tr></tfoot>";
   $("tbl").innerHTML = h;
 }
 
 function countsCSV() {
-  let s = "Date,Direction,Session," + S.cls.map((c, i) => q(cn(i))).join(",") + ",Total" + (S.usePce ? ",PCE" : "") + "\n";
+  let s = "Date,Direction,Session," + S.cls.map((c, i) => q(cn(i))).join(",") + ",Total Vehicles,PCU\n";
   rowsList().forEach(r => {
     const v = S.cls.map((c, i) => r.v[i] || 0);
-    s += [S.date || "", q(dn(r.d)), q(SL[r.s] || ""), ...v, sum(v)].concat(S.usePce ? [pcu(v).toFixed(2)] : []).join(",") + "\n";
+    s += [S.date || "", q(dn(r.d)), q(SL[r.s] || ""), ...v, sum(v), pcu(v).toFixed(2)].join(",") + "\n";
   });
   return s;
 }
@@ -1451,49 +640,30 @@ $("count").addEventListener("click", e => {
   if (pad) {
     const i = +pad.dataset.tap, k = key(), v = S.data[k] = S.data[k] || [];
     while (v.length < S.cls.length) v.push(0);
-    v[i]++;
-    S.hist.push([k, i]);
+    v[i]++; S.hist.push([k, i]);
     try { if (navigator.vibrate) navigator.vibrate(20); } catch(x) {}
-    save();
-    tally();
-    return;
+    save(); tally(); return;
   }
-
-  const btn = e.target.closest("button");
-  if (!btn) return;
-  const a = btn.dataset.a;
-  if (!a) return;
-
+  const btn = e.target.closest("button"); if (!btn) return;
+  const a = btn.dataset.a; if (!a) return;
   if (a === "next" || a === "prev") {
     S.cur.s = Math.max(0, Math.min(SL.length - 1, S.cur.s + (a === "next" ? 1 : -1)));
-    save();
-    $("count").querySelector('[data-s="s"]').value = S.cur.s;
-    tally();
+    save(); $("count").querySelector('[data-s="s"]').value = S.cur.s; tally();
   } else if (a === "undo") {
-    const h = S.hist.pop();
-    if (!h) return;
+    const h = S.hist.pop(); if (!h) return;
     const v = S.data[h[0]];
-    if (v) {
-      v[h[1]]--;
-      if (!v.some(n => n)) delete S.data[h[0]];
-    }
-    save();
-    tally();
+    if (v) { v[h[1]]--; if (!v.some(n => n)) delete S.data[h[0]]; }
+    save(); tally();
   } else if (a === "dl") {
     dl("traffic-count-" + (S.date || "field-log") + ".csv", countsCSV());
   } else if (a === "copy") {
-    const s = countsCSV(), x = $("csv");
-    x.value = s;
-    x.style.display = "block";
+    const s = countsCSV(), x = $("csv"); x.value = s; x.style.display = "block";
     (navigator.clipboard ? navigator.clipboard.writeText(s) : Promise.reject())
-      .then(() => btn.textContent = "Copied to clipboard ✓")
+      .then(() => btn.textContent = "Copied ✓")
       .catch(() => { x.select(); btn.textContent = "Copied text below"; });
     setTimeout(() => btn.textContent = "Copy CSV Data", 2500);
   } else if (a === "reset") {
-    openResetModal(() => {
-      S.data = {}; S.hist = []; S.log = []; S.cur.s = 0;
-      save(); render();
-    });
+    openResetModal(() => { S.data = {}; S.hist = []; S.log = []; S.cur.s = 0; save(); render(); });
   }
 });
 
@@ -1505,90 +675,68 @@ $("count").addEventListener("change", e => {
   save(); tally();
 });
 
-/* ---------- RESULTS SCREEN & NON-REPEATING 12-COLOR PIE PALETTE ---------- */
 function analyse(di) {
-  const n = SL.length, k = Math.round(60 / S.iv), vol = SL.map((_, s) => meas(S.data[di + "|" + s])), vh = SL.map((_, s) => sum(S.data[di + "|" + s])), r = {vol, k, n, tot: vol.reduce((a, b) => a + b, 0), totv: vh.reduce((a, b) => a + b, 0)};
+  const n = SL.length, k = Math.round(60 / S.iv);
+  const vol = SL.map((_, s) => pcu(S.data[di + "|" + s]));
+  const vh = SL.map((_, s) => sum(S.data[di + "|" + s]));
+  const r = {vol, k, n, tot: vol.reduce((a, b) => a + b, 0), totv: vh.reduce((a, b) => a + b, 0)};
   if (n >= k && k > 0) {
-    let best = -1, bi = 0;
+    let bestPCU = -1, bi = 0;
     for (let i = 0; i <= n - k; i++) {
-      let t = 0;
-      for (let j = 0; j < k; j++) t += vol[i + j];
-      if (t > best) { best = t; bi = i; }
+      let t = 0; for (let j = 0; j < k; j++) t += vol[i + j];
+      if (t > bestPCU) { bestPCU = t; bi = i; }
     }
-    r.start = bi; r.phv = best; r.veh = 0;
+    r.start = bi; r.phv = bestPCU; r.veh = 0;
     for (let j = 0; j < k; j++) r.veh += vh[bi + j];
     r.mx = Math.max(...vol.slice(bi, bi + k));
-    r.phf = r.mx ? best / (k * r.mx) : null;
+    r.phf = (r.mx && r.mx > 0) ? bestPCU / (k * r.mx) : null;
   }
   return r;
 }
 const pl = r => (SL[r.start] ? SL[r.start].split(" to ")[0] : "") + " to " + (SL[r.start + r.k - 1] ? SL[r.start + r.k - 1].split(" to ")[1] : "");
 
 const CH = {};
-const DISTINCT_PIE_PALETTE = [
-  "#2563eb", // Class 1: Crisp Royal Blue
-  "#10b981", // Class 2: Emerald Green
-  "#f59e0b", // Class 3: Warm Amber/Orange
-  "#8b5cf6", // Class 4: Purple / Violet
-  "#ec4899", // Class 5: Vibrant Pink
-  "#06b6d4", // Class 6: Cyan / Aqua
-  "#e11d48", // Class 7: Crimson Red
-  "#14b8a6", // Class 8: Deep Sea Teal
-  "#84cc16", // Class 9: Bright Lime
-  "#6366f1", // Class 10: Indigo
-  "#64748b", // Class 11: Slate Grey
-  "#d97706"  // Class 12: Copper Ochre
-];
+const DISTINCT_PIE_PALETTE = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#e11d48", "#14b8a6", "#84cc16", "#6366f1", "#64748b", "#d97706"];
 
-function mk(id, cfg, title) {
+function mk(id, cfg) {
   if (CH[id]) CH[id].destroy();
-  const isDark = document.documentElement.classList.contains("dark");
-  const textColor = isDark ? "#f5f8f5" : "#141b14";
-  const gridColor = isDark ? "#2d362e" : "#e2e4dc";
-
-  cfg.options = Object.assign({
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: false,
-    plugins: {
-      legend: {
-        labels: {
-          color: textColor,
-          font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' },
-          boxWidth: 14,
-          padding: 12
-        }
-      },
-      title: {
-        display: false
-      }
-    }
-  }, cfg.options || {});
-
-  if (cfg.options.scales) {
-    if (cfg.options.scales.x) {
-      cfg.options.scales.x.ticks = Object.assign({ color: textColor }, cfg.options.scales.x.ticks || {});
-      cfg.options.scales.x.grid = Object.assign({ color: gridColor }, cfg.options.scales.x.grid || {});
-    }
-    if (cfg.options.scales.y) {
-      cfg.options.scales.y.ticks = Object.assign({ color: textColor }, cfg.options.scales.y.ticks || {});
-      cfg.options.scales.y.grid = Object.assign({ color: gridColor }, cfg.options.scales.y.grid || {});
-    }
-  }
-
   CH[id] = new Chart($(id), cfg);
 }
 
+// Generate high-resolution standalone data URL for PDF reports
+function getChartImageUri(id) {
+  try {
+    const inst = CH[id];
+    if (inst && inst.canvas) {
+      // Create a solid white background canvas copy to avoid any transparency or cross-window taint
+      const w = inst.canvas.width || 800;
+      const h = inst.canvas.height || 360;
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(inst.canvas, 0, 0, w, h);
+      const uri = c.toDataURL("image/png", 1.0);
+      if (uri && uri.startsWith("data:image/png;base64,") && uri.length > 200) {
+        return uri;
+      }
+    }
+  } catch(e) {
+    console.error("Could not capture chart " + id, e);
+  }
+  return "";
+}
+
 function generatePDFReport() {
-  const isDark = document.documentElement.classList.contains("dark");
   const reportDate = S.date || new Date().toISOString().split("T")[0];
-  const u = UN();
+  const rateUnit = S.iv === 60 ? "PCU / hour" : `PCU / ${S.iv}m`;
 
   let approachesHtml = "";
   S.dirs.forEach((d, i) => {
     const r = A[i] || analyse(i);
-    const volumeChartImg = CH["h" + i] ? CH["h" + i].toBase64Image() : "";
-    const compChartImg = CH["p" + i] ? CH["p" + i].toBase64Image() : "";
+    const flowUri = getChartImageUri('h' + i);
+    const compUri = getChartImageUri('p' + i);
 
     let tableRows = "";
     SL.forEach((slot, si) => {
@@ -1596,70 +744,81 @@ function generatePDFReport() {
       const rowSum = sum(v);
       const isPeak = (r.start != null && si >= r.start && si < r.start + r.k);
       tableRows += `
-        <tr style="${isPeak ? 'background:#f0fdf4; font-weight:600;' : ''}">
-          <td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; font-size:12px;">${slot} ${isPeak ? '<span style="color:#16a34a; font-size:10px; font-weight:700;">(PEAK)</span>' : ''}</td>
-          ${S.cls.map((c, ci) => `<td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; text-align:right; font-size:12px;">${v[ci] || 0}</td>`).join("")}
-          <td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; text-align:right; font-size:12px; font-weight:700;">${rowSum}</td>
-          ${S.usePce ? `<td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; text-align:right; font-size:12px; font-weight:700; color:#166534;">${pcu(v).toFixed(1)}</td>` : ''}
+        <tr style="${isPeak ? 'background:#eff6ff; font-weight:700;' : ''}">
+          <td style="padding:7px 10px; border-bottom:1px solid #e2e8f0; font-size:12px;">${slot} ${isPeak ? '<span style="color:#1e3a8a; font-size:10px; font-weight:800; margin-left:4px;">★ PEAK HOUR</span>' : ''}</td>
+          ${S.cls.map((c, ci) => `<td style="padding:7px 10px; border-bottom:1px solid #e2e8f0; text-align:right; font-size:12px;">${v[ci] || 0}</td>`).join("")}
+          <td style="padding:7px 10px; border-bottom:1px solid #e2e8f0; text-align:right; font-size:12px; font-weight:700;">${rowSum}</td>
+          <td style="padding:7px 10px; border-bottom:1px solid #e2e8f0; text-align:right; font-size:12px; font-weight:800; color:#1e3a8a;">${pcu(v).toFixed(1)}</td>
         </tr>
       `;
     });
 
     approachesHtml += `
-      <div style="page-break-inside:avoid; margin-bottom:32px; border:1px solid #e2e8f0; border-radius:12px; padding:20px; background:#ffffff;">
-        <h3 style="margin:0 0 12px; font-size:18px; color:#0f172a; border-bottom:2px solid #9fe870; padding-bottom:6px;">Approach: ${esc(dn(i))}</h3>
-        
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:16px;">
-          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
-            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Total Count</div>
-            <div style="font-size:17px; font-weight:800; color:#0f172a;">${r.totv} <span style="font-size:12px; font-weight:500;">veh</span></div>
-            ${S.usePce ? `<div style="font-size:11px; color:#166534; font-weight:700;">${r.tot.toFixed(1)} PCE</div>` : ''}
+      <div style="page-break-inside:avoid; margin-bottom:30px; border:1px solid #cbd5e1; border-radius:12px; padding:22px; background:#ffffff;">
+        <h3 style="margin:0 0 14px; font-size:19px; color:#0f172a; border-bottom:2px solid #2563eb; padding-bottom:8px;">Approach: ${esc(dn(i))}</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:20px;">
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Total Approach Volume</div>
+            <div style="font-size:19px; font-weight:800; color:#0f172a;">${r.tot.toFixed(1)} <span style="font-size:13px; font-weight:600;">PCU</span></div>
+            <div style="font-size:11px; color:#64748b;">(${r.totv} total vehicles)</div>
           </div>
-          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
-            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Peak Hour Window</div>
-            <div style="font-size:15px; font-weight:800; color:#15803d;">${r.start != null ? pl(r) : 'N/A'}</div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Window (PCU)</div>
+            <div style="font-size:15px; font-weight:800; color:#1e3a8a;">${r.start != null ? pl(r) : 'N/A'}</div>
           </div>
-          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
-            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Peak Hour Vol (PHV)</div>
-            <div style="font-size:17px; font-weight:800; color:#0f172a;">${r.veh} <span style="font-size:12px; font-weight:500;">veh/h</span></div>
-            ${S.usePce ? `<div style="font-size:11px; color:#166534; font-weight:700;">${r.phv != null ? r.phv.toFixed(1) : ''} PCE/h</div>` : ''}
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Volume (PHV)</div>
+            <div style="font-size:19px; font-weight:800; color:#1e3a8a;">${r.phv != null ? r.phv.toFixed(1) : '0'} PCU/h</div>
+            <div style="font-size:11px; color:#64748b;">(${r.veh} vehicles in peak)</div>
           </div>
-          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
-            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Peak Hour Factor (PHF)</div>
-            <div style="font-size:18px; font-weight:800; color:#0f172a;">${r.phf == null ? "N/A" : r.phf.toFixed(2)}</div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Factor (PHF)</div>
+            <div style="font-size:19px; font-weight:800; color:#0f172a;">${S.iv === 60 ? '<span style="font-size:12.5px; font-weight:600; color:#64748b;">N/A (60m)</span>' : (r.phf == null ? "N/A" : r.phf.toFixed(2))}</div>
           </div>
         </div>
 
-        <!-- Rendered Charts Container -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
-          ${volumeChartImg ? `
-            <div style="border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
-              <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:8px;">Volume Profile</div>
-              <img src="${volumeChartImg}" style="max-width:100%; height:180px; object-fit:contain;" />
-            </div>
-          ` : ''}
-          ${compChartImg ? `
-            <div style="border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
-              <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:8px;">Vehicle Composition</div>
-              <img src="${compChartImg}" style="max-width:100%; height:180px; object-fit:contain;" />
-            </div>
-          ` : ''}
+        <div style="page-break-inside:avoid; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:20px 0;">
+          <div style="font-size:13.5px; font-weight:800; color:#0f172a; margin-bottom:8px; text-align:center;">${esc(dn(i))}: Interval Flow Profile (${rateUnit})</div>
+          <div style="width:75%; height:275px; display:flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:10px; padding:10px; background:#ffffff;">
+            ${flowUri ? `<img src="${flowUri}" alt="${esc(dn(i))} Flow Profile" style="max-width:100%; max-height:100%; object-fit:contain;" />` : '<div style="color:#64748b;">Chart rendering captured in session tables below.</div>'}
+          </div>
         </div>
 
-        <!-- Data table -->
+        <div style="page-break-inside:avoid; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:20px 0;">
+          <div style="font-size:13.5px; font-weight:800; color:#0f172a; margin-bottom:8px; text-align:center;">${esc(dn(i))}: Vehicle Fleet Composition Breakdown (PCU)</div>
+          <div style="width:75%; height:275px; display:flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:10px; padding:10px; background:#ffffff;">
+            ${compUri ? `<img src="${compUri}" alt="${esc(dn(i))} Composition" style="max-width:100%; max-height:100%; object-fit:contain;" />` : '<div style="color:#64748b;">Composition breakdown recorded in table below.</div>'}
+          </div>
+        </div>
+      </div>
+
+      <div class="pdf-table-page" style="page-break-before: always; break-before: page; margin-bottom:30px; border:1px solid #cbd5e1; border-radius:12px; padding:22px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #2563eb; padding-bottom:8px; margin-bottom:16px;">
+          <h3 style="margin:0; font-size:18px; color:#0f172a;">${esc(dn(i))}: Interval Count &amp; PCU Ledger</h3>
+          <span style="font-size:12px; font-weight:700; color:#475569;">Survey Interval: ${S.iv} minutes</span>
+        </div>
         <div style="overflow-x:auto;">
           <table style="width:100%; border-collapse:collapse; text-align:left;">
             <thead>
               <tr style="background:#f1f5f9;">
-                <th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; border-bottom:1px solid #cbd5e1;">Time Session</th>
-                ${S.cls.map(c => `<th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; text-align:right; border-bottom:1px solid #cbd5e1;">${esc(c.name || 'Class')}</th>`).join("")}
-                <th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; text-align:right; border-bottom:1px solid #cbd5e1;">Total</th>
-                ${S.usePce ? '<th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; text-align:right; border-bottom:1px solid #cbd5e1;">PCE</th>' : ''}
+                <th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#1e293b; border-bottom:2px solid #cbd5e1; font-weight:800;">Time Window</th>
+                ${S.cls.map(c => `<th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#1e293b; text-align:right; border-bottom:2px solid #cbd5e1; font-weight:800;">${esc(c.name || 'Class')} ${c.pce ? `(${c.pce})` : ''}</th>`).join("")}
+                <th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#1e293b; text-align:right; border-bottom:2px solid #cbd5e1; font-weight:800;">Vehicles</th>
+                <th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#1e3a8a; text-align:right; border-bottom:2px solid #cbd5e1; font-weight:800;">PCU</th>
               </tr>
             </thead>
-            <tbody>
-              ${tableRows}
-            </tbody>
+            <tbody>${tableRows}</tbody>
+            <tfoot>
+              <tr style="background:#f8fafc; font-weight:800; border-top:2px solid #cbd5e1;">
+                <td style="padding:8px 10px; font-size:12px; color:#0f172a;">Total</td>
+                ${S.cls.map((_, ci) => {
+                  const cSum = SL.reduce((acc, _, si) => acc + ((S.data[i + "|" + si] || [])[ci] || 0), 0);
+                  return `<td style="padding:8px 10px; text-align:right; font-size:12px; color:#0f172a;">${cSum}</td>`;
+                }).join("")}
+                <td style="padding:8px 10px; text-align:right; font-size:12px; color:#0f172a;">${r.totv}</td>
+                <td style="padding:8px 10px; text-align:right; font-size:13px; color:#1e3a8a;">${r.tot.toFixed(1)}</td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -1667,18 +826,21 @@ function generatePDFReport() {
   });
 
   let comparisonChartHtml = "";
-  if (S.dirs.length > 1 && CH["cmp"]) {
+  if (S.dirs.length > 1) {
+    const cmpUri = getChartImageUri('cmp');
     comparisonChartHtml = `
-      <div style="page-break-inside:avoid; margin-bottom:28px; border:1px solid #e2e8f0; border-radius:12px; padding:20px; background:#ffffff; text-align:center;">
-        <h3 style="margin:0 0 12px; font-size:16px; color:#0f172a;">Approach Peak Volume Comparison</h3>
-        <img src="${CH['cmp'].toBase64Image()}" style="max-width:100%; height:220px; object-fit:contain;" />
+      <div style="page-break-inside:avoid; margin-bottom:30px; border:1px solid #cbd5e1; border-radius:12px; padding:20px; background:#ffffff; display:flex; flex-direction:column; align-items:center;">
+        <h3 style="margin:0 0 14px; font-size:17px; color:#0f172a; text-align:center;">Approach Comparison: Peak Hour Volume (PCU / h)</h3>
+        <div style="width:75%; height:275px; display:flex; align-items:center; justify-content:center; border:1px solid #cbd5e1; border-radius:10px; padding:10px;">
+          ${cmpUri ? `<img src="${cmpUri}" alt="Approach Comparison" style="max-width:100%; max-height:100%; object-fit:contain;" />` : '<div style="color:#64748b;">Comparison recorded in summary ledger.</div>'}
+        </div>
       </div>
     `;
   }
 
   const printWindow = window.open("", "_blank");
   if (!printWindow) {
-    alert("Please allow pop-ups for this website to view and print the comprehensive report.");
+    alert("Please allow pop-ups to print the report.");
     return;
   }
 
@@ -1690,46 +852,54 @@ function generatePDFReport() {
       <meta charset="utf-8"/>
       <style>
         @page { size: A4 portrait; margin: 15mm; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1e293b; background: #ffffff; margin: 0; padding: 12px; }
-        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 800; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; background: #ffffff; margin: 0; padding: 12px; }
+        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 800; color: #0f172a; }
+        .pdf-table-page { page-break-before: always !important; break-before: page !important; }
         @media print {
           body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .no-print { display: none !important; }
+          .pdf-table-page { page-break-before: always !important; break-before: page !important; }
         }
       </style>
     </head>
     <body>
-      <div class="no-print" style="position:sticky; top:0; background:#0f172a; color:#ffffff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; border-radius:8px; margin-bottom:24px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+      <div class="no-print" style="position:sticky; top:0; background:#0f172a; color:#ffffff; padding:14px 22px; display:flex; justify-content:space-between; align-items:center; border-radius:8px; margin-bottom:24px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:100;">
         <div>
           <b style="font-size:16px;">Traffic Volume Survey Report Preview</b>
-          <div style="font-size:12px; color:#94a3b8;">High-resolution charts and tabular counts included. Ready to Save as PDF.</div>
+          <div style="font-size:12px; color:#94a3b8;">High-resolution charts &amp; separate page data tables.</div>
         </div>
-        <button onclick="window.print()" style="background:#9fe870; color:#163300; border:none; padding:10px 22px; border-radius:999px; font-weight:700; cursor:pointer; font-size:14px;">Print / Save as PDF</button>
+        <button onclick="window.print()" style="background:#2563eb; color:#ffffff; border:none; padding:10px 24px; border-radius:999px; font-weight:700; cursor:pointer; font-size:14px;">Print / Save as PDF</button>
       </div>
 
       <header style="border-bottom:2px solid #0f172a; padding-bottom:16px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-end;">
         <div>
-          <div style="display:inline-block; background:#9fe870; color:#163300; font-weight:800; font-size:11px; padding:4px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Traffic Volume Report</div>
+          <div style="display:inline-block; background:#eff6ff; color:#1d4ed8; font-weight:800; font-size:11px; padding:4px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Traffic Volume Report</div>
           <h1 style="margin:0; font-size:26px; color:#0f172a;">Traffic Volume &amp; Capacity Survey</h1>
-          <div style="font-size:13px; color:#64748b; margin-top:4px;">Date of Survey: <b>${reportDate}</b> &bull; Counting Interval: <b>${S.iv} minutes</b></div>
+          <div style="font-size:13px; color:#475569; margin-top:4px;">Date: <b>${reportDate}</b> &bull; Counting Interval: <b>${S.iv} minutes</b></div>
         </div>
-        <div style="text-align:right; font-size:12px; color:#64748b;">
+        <div style="text-align:right; font-size:12px; color:#475569;">
           <div><b>Survey Duration:</b> ${S.start || '--:--'} – ${S.end || '--:--'}</div>
-          <div><b>Evaluation Metric:</b> ${S.usePce ? 'Passenger Car Equivalent (PCE)' : 'Standard Vehicle Units'}</div>
+          <div><b>Metric:</b> Passenger Car Units (PCU)</div>
         </div>
       </header>
 
       ${comparisonChartHtml}
       ${approachesHtml}
 
-      <footer style="margin-top:32px; padding-top:16px; border-top:1px solid #cbd5e1; font-size:11px; color:#94a3b8; display:flex; justify-content:space-between;">
+      <footer style="margin-top:32px; padding-top:16px; border-top:1px solid #cbd5e1; font-size:11px; color:#64748b; display:flex; justify-content:space-between;">
         <span>Generated by Traffic Volume Survey Tool</span>
         <span>Local on-device session &bull; ${new Date().toLocaleString()}</span>
       </footer>
       <script>
-        window.addEventListener('load', () => {
-          setTimeout(() => { window.print(); }, 400);
-        });
+        function triggerPrint() {
+          const imgs = Array.from(document.images);
+          Promise.all(imgs.map(img => img.complete ? Promise.resolve() : new Promise(res => { img.onload = res; img.onerror = res; })))
+            .then(() => {
+              setTimeout(() => { window.focus(); window.print(); }, 250);
+            });
+        }
+        if (document.readyState === 'complete') triggerPrint();
+        else window.addEventListener('load', triggerPrint);
       <\/script>
     </body>
     </html>
@@ -1746,7 +916,7 @@ function renderRes() {
     el.innerHTML = `
       <div class="wise-card">
         <div class="wise-card-title">No counts recorded</div>
-        <p class="wise-card-subtitle">Perform a field count or import multi-counter CSV files to visualize analytics, PHF, and vehicle composition.</p>
+        <p class="wise-card-subtitle">Perform a field count or import CSV files to view analytics, PHF, and vehicle composition.</p>
         <div class="btn-group">
           <button class="btn btn-primary" data-go="setup" data-path="count">Setup survey</button>
           <button class="btn btn-secondary" data-go="imp" data-path="imp">Import files</button>
@@ -1768,17 +938,16 @@ function renderRes() {
     h += `
     <div style="margin-top: 16px; padding-top:16px; border-top: 1px solid var(--border-subtle);">
       <div style="font-family:var(--font-heading); font-size:18px; font-weight:800; margin-bottom:8px;">${esc(dn(i))}</div>
-      <div class="kv-row"><span class="kv-label">Total Volume Counted</span><span class="kv-value">${r.totv} vehicles ${S.usePce ? `(${r.tot.toFixed(1)} PCE)` : ''}</span></div>
+      <div class="kv-row"><span class="kv-label">Total Volume Counted</span><span class="kv-value">${r.tot.toFixed(1)} PCU <span style="font-weight:500; font-size:13px; color:var(--text-muted);">(${r.totv} vehicles)</span></span></div>
       ${r.start != null ? `
-        <div class="kv-row"><span class="kv-label">Calculated Peak Hour Window</span><span class="kv-value" style="color:var(--brand-green);">${pl(r)}</span></div>
-        <div class="kv-row"><span class="kv-label">Peak Hour Volume (PHV)</span><span class="kv-value">${S.usePce ? `${r.phv.toFixed(1)} PCE (${r.veh} veh)` : `${r.veh} vehicles`}</span></div>
-        <div class="kv-row"><span class="kv-label">Peak Hour Factor (PHF)</span><span class="kv-value" style="font-size:17px; font-weight:800;">${r.phf == null ? "n/a" : r.phf.toFixed(2)}</span></div>
+        <div class="kv-row"><span class="kv-label">Peak Hour Window (Highest PCU)</span><span class="kv-value" style="color:var(--brand-green);">${pl(r)}</span></div>
+        <div class="kv-row"><span class="kv-label">Peak Hour Volume (PHV)</span><span class="kv-value" style="font-size:17px;">${r.phv.toFixed(1)} PCU/h <span style="font-weight:500; font-size:13px; color:var(--text-muted);">(${r.veh} veh)</span></span></div>
+        <div class="kv-row"><span class="kv-label">Peak Hour Factor (PHF)</span><span class="kv-value" style="font-size:17px; font-weight:800;">${S.iv === 60 ? 'N/A (≤30m required)' : (r.phf == null ? "n/a" : r.phf.toFixed(2))}</span></div>
       ` : '<div class="wise-card-subtitle" style="margin-top:8px;">Survey span is under one hour, so peak hour window cannot be isolated.</div>'}
     </div>
     `;
   });
 
-  // Distinct Dual Export Actions with Clean Spacing
   h += `
     <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
       <button class="btn btn-primary btn-block" id="rcsv">
@@ -1793,39 +962,44 @@ function renderRes() {
   </div>
   `;
 
-  // Charts
-  const ch = [];
   S.dirs.forEach((d, i) => {
-    ch.push(["h" + i, dn(i) + ": Interval Volume Profile"]);
-    ch.push(["p" + i, dn(i) + ": Vehicle Composition Breakdown"]);
-  });
-  if (S.dirs.length > 1) {
-    ch.push(["cmp", "Approach Comparison: Peak Hour Volume"]);
-  }
-
-  ch.forEach(([id, t]) => {
     h += `
     <div class="chart-box">
       <div class="chart-header">
-        <div class="chart-title">${esc(t)}</div>
-        <button class="btn btn-secondary" style="padding:6px 14px; font-size:12.5px;" data-png="${id}">Save PNG</button>
+        <div class="chart-title">${esc(dn(i))}: Interval Flow Profile</div>
+        <button class="btn btn-secondary" style="padding:6px 14px; font-size:12.5px;" data-png="h${i}">Save PNG</button>
       </div>
-      <div class="chart-inner"><canvas id="${id}"></canvas></div>
+      <div class="chart-inner"><canvas id="h${i}"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-header">
+        <div class="chart-title">${esc(dn(i))}: Vehicle Composition Breakdown (PCU)</div>
+        <button class="btn btn-secondary" style="padding:6px 14px; font-size:12.5px;" data-png="p${i}">Save PNG</button>
+      </div>
+      <div class="chart-inner"><canvas id="p${i}"></canvas></div>
     </div>
     `;
   });
+
+  if (S.dirs.length > 1) {
+    h += `
+    <div class="chart-box">
+      <div class="chart-header">
+        <div class="chart-title">Approach Comparison: Peak Hour Volume (PCU/h)</div>
+        <button class="btn btn-secondary" style="padding:6px 14px; font-size:12.5px;" data-png="cmp">Save PNG</button>
+      </div>
+      <div class="chart-inner"><canvas id="cmp"></canvas></div>
+    </div>
+    `;
+  }
 
   h += `
   <div class="btn-group" style="margin-top:10px;">
     <button class="btn btn-secondary" data-go="count">Back to Field Counter</button>
     <button class="btn btn-secondary" data-go="imp" data-path="imp">Import CSV Files</button>
   </div>
-
   <div class="wise-card" style="margin-top:16px; padding:18px 24px;">
-    <button class="btn btn-danger btn-block" id="res-reset">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-      Start a new survey (Clear All)
-    </button>
+    <button class="btn btn-danger btn-block" id="res-reset">Start a new survey (Clear All)</button>
   </div>
   `;
 
@@ -1833,36 +1007,37 @@ function renderRes() {
 
   const lab = SL.map(s => s.split(" to ")[0]);
   const isDark = document.documentElement.classList.contains("dark");
-  const highlightColor = isDark ? "#9fe870" : "#163300";
-  const regularBarColor = isDark ? "#2d362e" : "#cbd5e1";
+  const textColor = isDark ? "#f5f8f5" : "#141b14";
+  const gridColor = isDark ? "#2d362e" : "#e2e4dc";
+  const peakBarColor = "#1e3a8a";
+  const normalBarColor = "#60a5fa";
+  const yAxisLabel = S.iv === 60 ? "PCU / hour" : `PCU / ${S.iv}m`;
 
   S.dirs.forEach((d, i) => {
     const r = A[i];
-    // Volume Bar Chart
     mk("h" + i, {
       type: "bar",
       data: {
         labels: lab,
         datasets: [{
           data: r.vol.map(v => +v.toFixed(1)),
-          backgroundColor: r.vol.map((_, s) => r.start != null && s >= r.start && s < r.start + r.k ? highlightColor : regularBarColor),
-          borderRadius: 6,
-          borderSkipped: false
+          backgroundColor: r.vol.map((_, s) => r.start != null && s >= r.start && s < r.start + r.k ? peakBarColor : normalBarColor),
+          borderRadius: 6
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: { beginAtZero: true, title: { display: true, text: UN() + " / window", color: isDark ? "#9ba79b" : "#5e665e" } }
+          x: { ticks: { color: textColor }, grid: { color: gridColor }, title: { display: true, text: "Survey Session Window", color: textColor } },
+          y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor }, title: { display: true, text: yAxisLabel, color: textColor } }
         }
       }
-    }, dn(i) + " Volume");
+    });
 
-    // PIE CHART WITH DISTINCT NON-REPEATING COLOR PALETTE
-    const tc = S.cls.map((c, ci) => Object.keys(S.data).filter(k => k.startsWith(i + "|")).reduce((a, k) => {
-      const factor = S.usePce ? (c.pce !== "" && !isNaN(+c.pce) ? +c.pce : 0) : 1;
-      return a + (S.data[k][ci] || 0) * factor;
-    }, 0));
+    const tc = S.cls.map((c, ci) => Object.keys(S.data).filter(k => k.startsWith(i + "|")).reduce((a, k) => a + (S.data[k][ci] || 0) * getPceFactor(ci), 0));
     const pieColors = S.cls.map((_, idx) => DISTINCT_PIE_PALETTE[idx % DISTINCT_PIE_PALETTE.length]);
 
     mk("p" + i, {
@@ -1877,12 +1052,13 @@ function renderRes() {
         }]
       },
       options: {
-        cutout: "62%",
-        plugins: {
-          legend: { position: "right" }
-        }
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        cutout: "58%",
+        plugins: { legend: { position: "right", labels: { color: textColor } } }
       }
-    }, dn(i) + " Composition");
+    });
   });
 
   if (S.dirs.length > 1) {
@@ -1891,45 +1067,45 @@ function renderRes() {
       data: {
         labels: S.dirs.map((d, i) => dn(i)),
         datasets: [{
-          label: "Peak Volume",
+          label: "Peak PCU Volume",
           data: A.map(r => +(r.phv || 0).toFixed(1)),
-          backgroundColor: [highlightColor, "#2563eb", "#ec4899", "#8b5cf6"],
+          backgroundColor: [peakBarColor, "#2563eb", "#3b82f6", "#60a5fa"],
           borderRadius: 8
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: { beginAtZero: true, title: { display: true, text: UN() + " / peak hour", color: isDark ? "#9ba79b" : "#5e665e" } }
+          x: { ticks: { color: textColor }, grid: { color: gridColor } },
+          y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor }, title: { display: true, text: "Peak Volume (PCU / hour)", color: textColor } }
         }
       }
-    }, "Direction Peak Volume Comparison");
+    });
   }
 }
 
 $("res").addEventListener("click", e => {
   const t = e.target;
-  if (t.closest("#res-reset")) {
-    openResetModal(() => resetEntireSurvey("home"));
-    return;
-  }
-  if (t.closest("#rprint")) {
-    generatePDFReport();
-    return;
-  }
+  if (t.closest("#res-reset")) { openResetModal(() => resetEntireSurvey("home")); return; }
+  if (t.closest("#rprint")) { generatePDFReport(); return; }
   if (t.dataset.png) {
-    const a = document.createElement("a");
-    a.href = CH[t.dataset.png].toBase64Image();
-    a.download = t.dataset.png + "-chart.png";
-    a.click();
+    const inst = CH[t.dataset.png];
+    if (inst) {
+      const a = document.createElement("a");
+      a.href = inst.toBase64Image('image/png', 1.0);
+      a.download = t.dataset.png + "-chart.png";
+      a.click();
+    }
   } else if (t.closest("#rcsv")) {
-    const u = UN();
-    let s = "Direction,Peak hour,Peak hour volume (" + u + "/h),Peak hour volume (vehicles),PHF,Total (" + u + ")\n";
+    let s = "Direction,Peak hour,Peak hour volume (PCU/h),Peak hour volume (vehicles),PHF,Total PCU,Total vehicles\n";
     S.dirs.forEach((d, i) => {
       const r = A[i];
-      s += [q(dn(i)), r.start != null ? q(pl(r)) : "n/a", r.phv != null ? r.phv.toFixed(1) : "", r.veh != null ? r.veh : "", r.phf != null ? r.phf.toFixed(2) : "", r.tot.toFixed(1)].join(",") + "\n";
+      s += [q(dn(i)), r.start != null ? q(pl(r)) : "n/a", r.phv != null ? r.phv.toFixed(1) : "", r.veh != null ? r.veh : "", S.iv === 60 ? "n/a" : (r.phf != null ? r.phf.toFixed(2) : ""), r.tot.toFixed(1), r.totv].join(",") + "\n";
     });
-    s += "\nSession," + S.dirs.map((d, i) => q(dn(i) + " (" + u + ")")).join(",") + "\n";
+    s += "\nSession," + S.dirs.map((d, i) => q(dn(i) + " (PCU)")).join(",") + "\n";
     SL.forEach((x, si) => {
       s += q(x) + "," + S.dirs.map((_, i) => (A[i] && A[i].vol && A[i].vol[si] != null ? A[i].vol[si].toFixed(1) : "0")).join(",") + "\n";
     });
@@ -1937,7 +1113,6 @@ $("res").addEventListener("click", e => {
   }
 });
 
-/* ---------- IMPORT SCREEN ---------- */
 const hash = t => {
   let h = 5381;
   for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0;
@@ -1948,9 +1123,7 @@ function parseCSV(t) {
   for (let i = 0; i < t.length; i++) {
     const c = t[i];
     if (q) {
-      if (c == '"') {
-        if (t[i + 1] == '"') { f += '"'; i++; } else q = false;
-      } else f += c;
+      if (c == '"') { if (t[i + 1] == '"') { f += '"'; i++; } else q = false; } else f += c;
     } else if (c == '"') q = true;
     else if (c == ",") { r.push(f); f = ""; }
     else if (c == "\n") { r.push(f); R.push(r); r = []; f = ""; }
@@ -1962,8 +1135,10 @@ function parseCSV(t) {
 function parseCounts(t) {
   const R = parseCSV(t.replace(/^\uFEFF/, ""));
   if (R.length < 2) return {err: "File is blank or unreadable."};
-  const H = R[0].map(x => x.trim()), iS = H.indexOf("Session"), iT = H.indexOf("Total");
-  if (iS < 0 || iT < 0 || iT <= iS + 1) return {err: "Invalid structure. This file was not generated by the tool."};
+  const H = R[0].map(x => x.trim()), iS = H.indexOf("Session");
+  let iT = H.indexOf("Total Vehicles");
+  if (iT < 0) iT = H.indexOf("Total");
+  if (iS < 0 || iT < 0 || iT <= iS + 1) return {err: "Invalid structure."};
   const names = H.slice(iS + 1, iT), rows = [];
   for (const x of R.slice(1)) {
     const m = (x[iS] || "").trim().match(/^(\d\d:\d\d) to (\d\d:\d\d)$/);
@@ -1971,8 +1146,7 @@ function parseCounts(t) {
     let a = pm(m[1]), b = pm(m[2]);
     if (b <= a) b += 1440;
     rows.push({
-      label: x[iS].trim(),
-      a, b,
+      label: x[iS].trim(), a, b,
       v: names.map((_, j) => Math.max(0, parseInt(x[iS + 1 + j]) || 0))
     });
   }
@@ -1985,17 +1159,10 @@ function plan(d, P, mode) {
   const was = locked(); let first = !was;
   for (const f of P) {
     const fi = f.rows[0].b - f.rows[0].a, fa = Math.min(...f.rows.map(r => r.a)), fb = Math.max(...f.rows.map(r => r.b));
-    if (![15, 30, 60].includes(fi) || f.rows.some(r => r.b - r.a !== fi)) {
-      skipped.push(f.name + ": intervals must uniformly be 15, 30 or 60 min");
-      continue;
-    }
+    if (![15, 30, 60].includes(fi) || f.rows.some(r => r.b - r.a !== fi)) { skipped.push(f.name + ": intervals must be 15, 30 or 60 min"); continue; }
     if (first) { a = fa; b = fb; iv = fi; first = false; }
-    else if (fi !== iv) {
-      skipped.push(f.name + ": interval size (" + fi + "m) differs from existing (" + iv + "m)");
-      continue;
-    } else if (b <= 1440 && fb <= 1440) {
-      a = Math.min(a, fa); b = Math.max(b, fb);
-    }
+    else if (fi !== iv) { skipped.push(f.name + ": interval size (" + fi + "m) differs from survey (" + iv + "m)"); continue; }
+    else if (b <= 1440 && fb <= 1440) { a = Math.min(a, fa); b = Math.max(b, fb); }
     ok.push(f);
   }
   const nsl = slots(tm(a), tm(b), iv), osl = slots(), src = {};
@@ -2011,7 +1178,7 @@ function plan(d, P, mode) {
     });
     for (const r of f.rows) {
       const si = nsl.indexOf(r.label);
-      if (si < 0) { skipped.push(f.name + ": " + r.label + " falls outside survey time bounds"); continue; }
+      if (si < 0) { skipped.push(f.name + ": " + r.label + " falls outside survey time"); continue; }
       const k = d + "|" + si, t = src[k] = src[k] || [];
       while (t.length < cls.length) t.push(0);
       r.v.forEach((n, j) => {
@@ -2031,8 +1198,7 @@ async function doImport(d, files) {
   for (const f of files) {
     const t = await f.text(), h = hash(t);
     if (S.log.some(l => l.h === h) || parsed.some(p => p.h === h)) {
-      MSG.push(f.name + ": duplicate file detected, skipped");
-      continue;
+      MSG.push(f.name + ": duplicate skipped"); continue;
     }
     const r = parseCounts(t);
     if (r.err) { MSG.push(f.name + ": " + r.err); continue; }
@@ -2051,8 +1217,8 @@ function commit(mode) {
   S.data = r.data; S.cls = r.cls; S.start = r.st; S.end = r.en; S.iv = r.iv; S.hist = []; S.cur.s = 0;
   r.ok.forEach(f => S.log.push({h: f.h, name: f.name, d, n: f.rows.length}));
   MSG.push(...[...new Set(r.skipped)].slice(0, 6));
-  if (r.ok.length) MSG.push("Imported " + r.ok.length + " file" + (r.ok.length > 1 ? "s" : "") + " into " + dn(d) + (r.conf ? ". " + r.conf + " overlaps: " + {keep: "kept existing", replace: "used incoming", add: "summed together"}[mode] : ""));
-  if (r.newCls.length) MSG.push("Detected & added classes: " + r.newCls.join(", "));
+  if (r.ok.length) MSG.push("Imported " + r.ok.length + " file" + (r.ok.length > 1 ? "s" : "") + " into " + dn(d));
+  if (r.newCls.length) MSG.push("Detected classes: " + r.newCls.join(", "));
   save(); render();
 }
 
@@ -2065,7 +1231,7 @@ function renderImport() {
     h += `
     <div class="wise-card">
       <div class="wise-card-title">Overlap Resolution</div>
-      <p class="wise-card-subtitle">${c} count records collide with existing records for <b>${esc(dn(PEND.d))}</b>. Select how you want to merge them:</p>
+      <p class="wise-card-subtitle">${c} count records collide for <b>${esc(dn(PEND.d))}</b>. Select how to merge:</p>
       <div class="btn-group">
         <button class="btn btn-primary" data-mode="keep">Preserve Existing</button>
         <button class="btn btn-secondary" data-mode="replace">Use Imported</button>
@@ -2075,24 +1241,8 @@ function renderImport() {
     </div>
     `;
   }
-
-  h += `
-  <div class="wise-card">
-    <div class="wise-card-title">Multi-Device Import</div>
-    <div class="wise-card-subtitle">Combine CSV files recorded across multiple smartphones or surveyors into a single unified dataset.</div>
-  </div>
-  `;
-
-  if (S.dirs.length === 0) {
-    h += `
-    <div class="wise-card">
-      <div class="wise-card-subtitle">No roadway approaches defined. Click below to add a direction for importing.</div>
-    </div>
-    `;
-  }
-
+  h += `<div class="wise-card"><div class="wise-card-title">Multi-Device Import</div><div class="wise-card-subtitle">Combine CSV files recorded across multiple smartphones or surveyors into a single unified dataset.</div></div>`;
   const multiDirs = S.dirs.length > 1;
-
   S.dirs.forEach((d, i) => {
     const L = S.log.filter(l => l.d === i), n = Object.keys(S.data).filter(k => k.startsWith(i + "|")).length;
     h += `
@@ -2100,32 +1250,18 @@ function renderImport() {
       <div class="form-group">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
           <label style="margin:0;">Direction Label ${multiDirs ? `(${i + 1})` : ''}</label>
-          ${multiDirs ? `
-            <button class="btn btn-secondary btn-danger" style="padding:4px 12px; height:32px; font-size:13px; gap:4px;" data-rm-d="${i}">
-              ✕ Remove
-            </button>
-          ` : `
-            <button class="btn btn-secondary btn-danger" style="padding:4px 12px; height:32px; font-size:13px; gap:4px;" disabled title="At least one direction is required">
-              ✕ Remove
-            </button>
-          `}
+          <button class="btn btn-secondary btn-danger" style="padding:4px 12px; height:32px; font-size:13px; gap:4px;" data-rm-d="${i}" ${multiDirs ? '' : 'disabled'}>✕ Remove</button>
         </div>
-        <div style="display:grid; grid-template-columns: 1fr; gap:8px; align-items:center;">
-          <input data-n="${i}" placeholder="e.g. Northbound" value="${esc(d.name || "")}">
-        </div>
+        <input data-n="${i}" placeholder="e.g. Northbound" value="${esc(d.name || "")}">
       </div>
       <label class="btn btn-primary" style="display:inline-flex; width:100%; cursor:pointer;">
         <span>Select CSV Files for ${esc(dn(i))}</span>
         <input type="file" accept=".csv,text/csv" multiple data-f="${i}" style="display:none">
       </label>
-      <div class="wise-card-subtitle" style="margin-top:12px; margin-bottom:0;">
-        ${n} session${n === 1 ? "" : "s"} currently recorded.
-        ${L.length ? `<br><b>Imported logs:</b> ` + L.map(l => esc(l.name)).join(", ") : ""}
-      </div>
+      <div class="wise-card-subtitle" style="margin-top:12px; margin-bottom:0;">${n} session${n === 1 ? "" : "s"} currently recorded.</div>
     </div>
     `;
   });
-
   h += `
   <button class="btn btn-secondary btn-block" data-add="1">+ Add another direction approach</button>
   <div class="btn-group" style="margin-top:14px;">
@@ -2133,50 +1269,29 @@ function renderImport() {
     <button class="btn btn-secondary" data-go="res" data-path="imp">View Results</button>
   </div>
   `;
-
   $("imp").innerHTML = h;
 }
 
 $("imp").addEventListener("change", e => {
   const t = e.target;
-  if (t.dataset.f !== undefined) {
-    const fl = [...t.files];
-    t.value = "";
-    doImport(+t.dataset.f, fl);
-  }
+  if (t.dataset.f !== undefined) { const fl = [...t.files]; t.value = ""; doImport(+t.dataset.f, fl); }
 });
 $("imp").addEventListener("input", e => {
   const t = e.target;
-  if (t.dataset.n !== undefined) {
-    S.dirs[+t.dataset.n].name = t.value;
-    save();
-  }
+  if (t.dataset.n !== undefined) { S.dirs[+t.dataset.n].name = t.value; save(); }
 });
 $("imp").addEventListener("click", e => {
-  const t = e.target;
-  const rmBtn = t.closest("[data-rm-d]");
-  if (rmBtn) {
-    const idx = +rmBtn.dataset.rmD;
-    removeDirection(idx);
-    renderImport();
-    return;
-  }
-  if (t.dataset.add) {
-    S.dirs.push({name: ""});
-    save();
-    renderImport();
-  } else if (t.dataset.mode) {
+  const t = e.target, rmBtn = t.closest("[data-rm-d]");
+  if (rmBtn) { removeDirection(+rmBtn.dataset.rmD); renderImport(); return; }
+  if (t.dataset.add) { S.dirs.push({name: ""}); save(); renderImport(); }
+  else if (t.dataset.mode) {
     if (t.dataset.mode === "cancel") { PEND = null; MSG = []; renderImport(); }
     else commit(t.dataset.mode);
   }
 });
 
-// Init on boot
 initTheme();
-// Replace state for initial landing view so back stack is well-formed
-if (!history.state) {
-  history.replaceState({ tab: S.tab }, '', '#' + S.tab);
-}
+if (!history.state) history.replaceState({ tab: S.tab }, '', '#' + S.tab);
 render();
 </script>
 </body></html>
