@@ -395,6 +395,15 @@ body.open .ov { opacity: 1; pointer-events: auto; }
 .btn-secondary:hover {
   background: var(--border-subtle);
 }
+.btn-outline-action {
+  background: transparent;
+  color: var(--text-main);
+  border: 1.5px solid var(--border-strong);
+}
+.btn-outline-action:hover {
+  background: var(--bg-subtle);
+  border-color: var(--brand-green);
+}
 .btn-danger {
   background: var(--danger-bg);
   color: var(--danger-text);
@@ -907,7 +916,15 @@ try {
 if (!Array.isArray(S.dirs) || S.dirs.length === 0) {
   S.dirs = [{name: ""}];
 }
-S.tab = "home";
+
+// Read URL hash on initial load or fallback
+const validTabs = ["home", "setup", "count", "res", "imp"];
+const initialHash = (location.hash || "").replace("#", "");
+if (validTabs.includes(initialHash)) {
+  S.tab = initialHash;
+} else if (!validTabs.includes(S.tab)) {
+  S.tab = "home";
+}
 
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} };
 const dn = i => (S.dirs[i] && S.dirs[i].name && S.dirs[i].name.trim()) || "Direction " + (i + 1);
@@ -987,7 +1004,7 @@ function resetEntireSurvey(targetTab = "home") {
   S.surveyStarted = false;
   try { localStorage.removeItem(KEY); } catch(e) {}
   save();
-  render();
+  go(targetTab, false);
 }
 
 /* ---------- THEME TOGGLE (DARK / LIGHT) ---------- */
@@ -1009,16 +1026,31 @@ function updateThemeButton(isDark) {
 }
 $("theme-btn").onclick = toggleTheme;
 
-/* ---------- NAVIGATION ---------- */
+/* ---------- NAVIGATION & BROWSER/PHONE BACK BUTTON INTEGRATION ---------- */
 const PT = {home: "Overview", setup: "Survey Setup", count: "Field Counter", res: "Results & Insights", imp: "Import Data"};
-function go(t) {
+
+function go(t, push = true) {
   MSG = []; PEND = null;
   S.tab = t;
   document.body.classList.remove("open");
+  if (push) {
+    history.pushState({ tab: t }, '', '#' + t);
+  }
   save();
   render();
   window.scrollTo({top: 0, behavior: "smooth"});
 }
+
+// Synchronize browser history and phone back button
+window.addEventListener("popstate", e => {
+  const targetTab = (e.state && e.state.tab) || (location.hash ? location.hash.replace("#", "") : "home");
+  if (validTabs.includes(targetTab)) {
+    go(targetTab, false);
+  } else {
+    go("home", false);
+  }
+});
+
 function render() {
   SL = slots();
   if (S.dirs.length && S.cur.d >= S.dirs.length) S.cur.d = 0;
@@ -1547,6 +1579,167 @@ function mk(id, cfg, title) {
   CH[id] = new Chart($(id), cfg);
 }
 
+function generatePDFReport() {
+  const isDark = document.documentElement.classList.contains("dark");
+  const reportDate = S.date || new Date().toISOString().split("T")[0];
+  const u = UN();
+
+  let approachesHtml = "";
+  S.dirs.forEach((d, i) => {
+    const r = A[i] || analyse(i);
+    const volumeChartImg = CH["h" + i] ? CH["h" + i].toBase64Image() : "";
+    const compChartImg = CH["p" + i] ? CH["p" + i].toBase64Image() : "";
+
+    let tableRows = "";
+    SL.forEach((slot, si) => {
+      const v = S.data[i + "|" + si] || [];
+      const rowSum = sum(v);
+      const isPeak = (r.start != null && si >= r.start && si < r.start + r.k);
+      tableRows += `
+        <tr style="${isPeak ? 'background:#f0fdf4; font-weight:600;' : ''}">
+          <td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; font-size:12px;">${slot} ${isPeak ? '<span style="color:#16a34a; font-size:10px; font-weight:700;">(PEAK)</span>' : ''}</td>
+          ${S.cls.map((c, ci) => `<td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; text-align:right; font-size:12px;">${v[ci] || 0}</td>`).join("")}
+          <td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; text-align:right; font-size:12px; font-weight:700;">${rowSum}</td>
+          ${S.usePce ? `<td style="padding:6px 10px; border-bottom:1px solid #e5e7eb; text-align:right; font-size:12px; font-weight:700; color:#166534;">${pcu(v).toFixed(1)}</td>` : ''}
+        </tr>
+      `;
+    });
+
+    approachesHtml += `
+      <div style="page-break-inside:avoid; margin-bottom:32px; border:1px solid #e2e8f0; border-radius:12px; padding:20px; background:#ffffff;">
+        <h3 style="margin:0 0 12px; font-size:18px; color:#0f172a; border-bottom:2px solid #9fe870; padding-bottom:6px;">Approach: ${esc(dn(i))}</h3>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:16px;">
+          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
+            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Total Count</div>
+            <div style="font-size:17px; font-weight:800; color:#0f172a;">${r.totv} <span style="font-size:12px; font-weight:500;">veh</span></div>
+            ${S.usePce ? `<div style="font-size:11px; color:#166534; font-weight:700;">${r.tot.toFixed(1)} PCE</div>` : ''}
+          </div>
+          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
+            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Peak Hour Window</div>
+            <div style="font-size:15px; font-weight:800; color:#15803d;">${r.start != null ? pl(r) : 'N/A'}</div>
+          </div>
+          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
+            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Peak Hour Vol (PHV)</div>
+            <div style="font-size:17px; font-weight:800; color:#0f172a;">${r.veh} <span style="font-size:12px; font-weight:500;">veh/h</span></div>
+            ${S.usePce ? `<div style="font-size:11px; color:#166534; font-weight:700;">${r.phv != null ? r.phv.toFixed(1) : ''} PCE/h</div>` : ''}
+          </div>
+          <div style="background:#f8fafc; padding:10px; border-radius:8px;">
+            <div style="font-size:11px; color:#64748b; text-transform:uppercase; font-weight:700;">Peak Hour Factor (PHF)</div>
+            <div style="font-size:18px; font-weight:800; color:#0f172a;">${r.phf == null ? "N/A" : r.phf.toFixed(2)}</div>
+          </div>
+        </div>
+
+        <!-- Rendered Charts Container -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
+          ${volumeChartImg ? `
+            <div style="border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
+              <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:8px;">Volume Profile</div>
+              <img src="${volumeChartImg}" style="max-width:100%; height:180px; object-fit:contain;" />
+            </div>
+          ` : ''}
+          ${compChartImg ? `
+            <div style="border:1px solid #e2e8f0; border-radius:8px; padding:12px; text-align:center;">
+              <div style="font-size:12px; font-weight:700; color:#475569; margin-bottom:8px;">Vehicle Composition</div>
+              <img src="${compChartImg}" style="max-width:100%; height:180px; object-fit:contain;" />
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Data table -->
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; text-align:left;">
+            <thead>
+              <tr style="background:#f1f5f9;">
+                <th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; border-bottom:1px solid #cbd5e1;">Time Session</th>
+                ${S.cls.map(c => `<th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; text-align:right; border-bottom:1px solid #cbd5e1;">${esc(c.name || 'Class')}</th>`).join("")}
+                <th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; text-align:right; border-bottom:1px solid #cbd5e1;">Total</th>
+                ${S.usePce ? '<th style="padding:6px 10px; font-size:11px; text-transform:uppercase; color:#475569; text-align:right; border-bottom:1px solid #cbd5e1;">PCE</th>' : ''}
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  });
+
+  let comparisonChartHtml = "";
+  if (S.dirs.length > 1 && CH["cmp"]) {
+    comparisonChartHtml = `
+      <div style="page-break-inside:avoid; margin-bottom:28px; border:1px solid #e2e8f0; border-radius:12px; padding:20px; background:#ffffff; text-align:center;">
+        <h3 style="margin:0 0 12px; font-size:16px; color:#0f172a;">Approach Peak Volume Comparison</h3>
+        <img src="${CH['cmp'].toBase64Image()}" style="max-width:100%; height:220px; object-fit:contain;" />
+      </div>
+    `;
+  }
+
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("Please allow pop-ups for this website to view and print the comprehensive report.");
+    return;
+  }
+
+  const reportDoc = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Traffic Survey Report - ${reportDate}</title>
+      <meta charset="utf-8"/>
+      <style>
+        @page { size: A4 portrait; margin: 15mm; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1e293b; background: #ffffff; margin: 0; padding: 12px; }
+        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 800; }
+        @media print {
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .no-print { display: none !important; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="no-print" style="position:sticky; top:0; background:#0f172a; color:#ffffff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; border-radius:8px; margin-bottom:24px; box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+        <div>
+          <b style="font-size:16px;">Traffic Volume Survey Report Preview</b>
+          <div style="font-size:12px; color:#94a3b8;">High-resolution charts and tabular counts included. Ready to Save as PDF.</div>
+        </div>
+        <button onclick="window.print()" style="background:#9fe870; color:#163300; border:none; padding:10px 22px; border-radius:999px; font-weight:700; cursor:pointer; font-size:14px;">Print / Save as PDF</button>
+      </div>
+
+      <header style="border-bottom:2px solid #0f172a; padding-bottom:16px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:flex-end;">
+        <div>
+          <div style="display:inline-block; background:#9fe870; color:#163300; font-weight:800; font-size:11px; padding:4px 10px; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Traffic Volume Report</div>
+          <h1 style="margin:0; font-size:26px; color:#0f172a;">Traffic Volume &amp; Capacity Survey</h1>
+          <div style="font-size:13px; color:#64748b; margin-top:4px;">Date of Survey: <b>${reportDate}</b> &bull; Counting Interval: <b>${S.iv} minutes</b></div>
+        </div>
+        <div style="text-align:right; font-size:12px; color:#64748b;">
+          <div><b>Survey Duration:</b> ${S.start || '--:--'} – ${S.end || '--:--'}</div>
+          <div><b>Evaluation Metric:</b> ${S.usePce ? 'Passenger Car Equivalent (PCE)' : 'Standard Vehicle Units'}</div>
+        </div>
+      </header>
+
+      ${comparisonChartHtml}
+      ${approachesHtml}
+
+      <footer style="margin-top:32px; padding-top:16px; border-top:1px solid #cbd5e1; font-size:11px; color:#94a3b8; display:flex; justify-content:space-between;">
+        <span>Generated by Traffic Volume Survey Tool</span>
+        <span>Local on-device session &bull; ${new Date().toLocaleString()}</span>
+      </footer>
+      <script>
+        window.addEventListener('load', () => {
+          setTimeout(() => { window.print(); }, 400);
+        });
+      <\/script>
+    </body>
+    </html>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(reportDoc);
+  printWindow.document.close();
+}
+
 function renderRes() {
   const el = $("res");
   if (!locked()) {
@@ -1585,8 +1778,18 @@ function renderRes() {
     `;
   });
 
+  // Distinct Dual Export Actions with Clean Spacing
   h += `
-    <button class="btn btn-primary btn-block" id="rcsv" style="margin-top:16px;">Download Complete Results CSV</button>
+    <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+      <button class="btn btn-primary btn-block" id="rcsv">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download CSV (Data only)
+      </button>
+      <button class="btn btn-outline-action btn-block" id="rprint" style="padding:13px 24px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Export Report (PDF / Print with Charts)
+      </button>
+    </div>
   </div>
   `;
 
@@ -1710,12 +1913,16 @@ $("res").addEventListener("click", e => {
     openResetModal(() => resetEntireSurvey("home"));
     return;
   }
+  if (t.closest("#rprint")) {
+    generatePDFReport();
+    return;
+  }
   if (t.dataset.png) {
     const a = document.createElement("a");
     a.href = CH[t.dataset.png].toBase64Image();
     a.download = t.dataset.png + "-chart.png";
     a.click();
-  } else if (t.id === "rcsv") {
+  } else if (t.closest("#rcsv")) {
     const u = UN();
     let s = "Direction,Peak hour,Peak hour volume (" + u + "/h),Peak hour volume (vehicles),PHF,Total (" + u + ")\n";
     S.dirs.forEach((d, i) => {
@@ -1966,6 +2173,10 @@ $("imp").addEventListener("click", e => {
 
 // Init on boot
 initTheme();
+// Replace state for initial landing view so back stack is well-formed
+if (!history.state) {
+  history.replaceState({ tab: S.tab }, '', '#' + S.tab);
+}
 render();
 </script>
 </body></html>
