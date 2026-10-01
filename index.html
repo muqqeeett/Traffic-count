@@ -648,6 +648,9 @@ tfoot td {
   height: 280px;
   position: relative;
 }
+/* Interval bar charts carry rotated time-range labels, so they get more height. Screen only: the PDF builds its own images. */
+.chart-inner.tall { height: 420px; }
+@media (max-width: 600px) { .chart-inner.tall { height: 360px; } }
 
 .wise-procedure {
   display: flex;
@@ -2144,7 +2147,7 @@ function renderRes() {
         <div class="chart-title">${esc(t)}</div>
         <button class="btn btn-secondary" style="padding:6px 14px; font-size:12.5px;" data-png="${id}">Save PNG</button>
       </div>
-      <div class="chart-inner"><canvas id="${id}"></canvas></div>
+      <div class="chart-inner${id[0] === "h" ? " tall" : ""}"><canvas id="${id}"></canvas></div>
     </div>
     `;
   });
