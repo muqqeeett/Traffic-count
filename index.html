@@ -915,8 +915,10 @@ const pcu = v => (v || []).reduce((a, n, i) => {
   const f = S.cls[i] && S.cls[i].pce !== "" && !isNaN(+S.cls[i].pce) ? +S.cls[i].pce : 0;
   return a + (n || 0) * f;
 }, 0);
-const meas = v => S.usePce ? pcu(v) : sum(v);
-const UN = () => S.usePce ? "PCU" : "Vehicles";
+// PCE is applied only when it is switched on AND every class has a valid factor; otherwise plain vehicle counts are used
+const pceReady = () => !!S.usePce && S.cls.length > 0 && S.cls.every(c => c && c.pce !== "" && c.pce != null && !isNaN(+c.pce) && +c.pce > 0);
+const meas = v => pceReady() ? pcu(v) : sum(v);
+const UN = () => pceReady() ? "PCU" : "Vehicles";
 const pceMissing = () => S.usePce ? S.cls.map((c, i) => !(c && c.pce !== "" && !isNaN(+c.pce) && +c.pce > 0) ? cn(i) : null).filter(Boolean) : [];
 const key = () => S.cur.d + "|" + S.cur.s;
 const dl = (name, text) => {
@@ -928,7 +930,7 @@ const dl = (name, text) => {
 function rowsList() {
   return Object.keys(S.data).map(k => k.split("|").map(Number)).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(([d, s]) => ({d, s, v: S.data[d + "|" + s]}));
 }
-const pmWarn = () => pceMissing().length ? '<div class="wise-banner warning"><b>PCE Attention:</b> Factor not set for: ' + esc(pceMissing().join(", ")) + '. Configure them in Setup, or they count as 0.</div>' : "";
+const pmWarn = () => pceMissing().length ? '<div class="wise-banner warning"><b>PCE Attention:</b> Factor not set for: ' + esc(pceMissing().join(", ")) + '. Until every class has a factor, results use plain vehicle counts. Configure them in Setup.</div>' : "";
 
 /* ---------- CENTRALIZED PROTECTIVE CONFIRMATION MODAL ---------- */
 let onConfirmResetCallback = null;
@@ -1336,7 +1338,7 @@ function renderCount() {
   <div class="tally-status-bar">
     <div class="tally-metric">
       <b id="tot">0</b> <span>vehicles this window</span>
-      ${S.usePce ? ' &bull; <b id="pce">0</b> <span>PCE</span>' : ''}
+      ${pceReady() ? ' &bull; <b id="pce">0</b> <span>PCE</span>' : ''}
     </div>
     <button class="btn btn-secondary" style="padding:8px 18px; font-size:13.5px;" data-a="undo">↶ Undo</button>
   </div>
@@ -1381,21 +1383,21 @@ function tally() {
     return;
   }
 
-  let h = "<tr><th>Window</th><th>Direction</th>" + S.cls.map((c, i) => "<th>" + esc(cn(i)) + "</th>").join("") + "<th>Total</th>" + (S.usePce ? "<th>PCE</th>" : "") + "</tr>";
+  let h = "<tr><th>Window</th><th>Direction</th>" + S.cls.map((c, i) => "<th>" + esc(cn(i)) + "</th>").join("") + "<th>Total</th>" + (pceReady() ? "<th>PCE</th>" : "") + "</tr>";
   const tt = S.cls.map(() => 0);
   L.forEach(r => {
     S.cls.forEach((c, i) => tt[i] += r.v[i] || 0);
-    h += "<tr><td>" + (SL[r.s] || "Session " + (r.s + 1)) + "</td><td>" + esc(dn(r.d)) + "</td>" + S.cls.map((c, i) => "<td>" + (r.v[i] || "—") + "</td>").join("") + "<td><b>" + sum(r.v) + "</b></td>" + (S.usePce ? "<td>" + pcu(r.v).toFixed(1) + "</td>" : "") + "</tr>";
+    h += "<tr><td>" + (SL[r.s] || "Session " + (r.s + 1)) + "</td><td>" + esc(dn(r.d)) + "</td>" + S.cls.map((c, i) => "<td>" + (r.v[i] || "—") + "</td>").join("") + "<td><b>" + sum(r.v) + "</b></td>" + (pceReady() ? "<td>" + pcu(r.v).toFixed(1) + "</td>" : "") + "</tr>";
   });
-  h += "<tfoot><tr><td>Total</td><td></td>" + tt.map(n => "<td>" + n + "</td>").join("") + "<td>" + sum(tt) + "</td>" + (S.usePce ? "<td>" + pcu(tt).toFixed(1) + "</td>" : "") + "</tr></tfoot>";
+  h += "<tfoot><tr><td>Total</td><td></td>" + tt.map(n => "<td>" + n + "</td>").join("") + "<td>" + sum(tt) + "</td>" + (pceReady() ? "<td>" + pcu(tt).toFixed(1) + "</td>" : "") + "</tr></tfoot>";
   $("tbl").innerHTML = h;
 }
 
 function countsCSV() {
-  let s = "Date,Direction,Session," + S.cls.map((c, i) => q(cn(i))).join(",") + ",Total" + (S.usePce ? ",PCE" : "") + "\n";
+  let s = "Date,Direction,Session," + S.cls.map((c, i) => q(cn(i))).join(",") + ",Total" + (pceReady() ? ",PCE" : "") + "\n";
   rowsList().forEach(r => {
     const v = S.cls.map((c, i) => r.v[i] || 0);
-    s += [S.date || "", q(dn(r.d)), q(SL[r.s] || ""), ...v, sum(v)].concat(S.usePce ? [pcu(v).toFixed(2)] : []).join(",") + "\n";
+    s += [S.date || "", q(dn(r.d)), q(SL[r.s] || ""), ...v, sum(v)].concat(pceReady() ? [pcu(v).toFixed(2)] : []).join(",") + "\n";
   });
   return s;
 }
@@ -1642,14 +1644,14 @@ function generatePDFReport() {
         },
         y: {
           beginAtZero: true,
-          title: { display: true, text: (S.usePce ? "Peak PCU Volume (PCU / hour)" : "Vehicles / interval") }
+          title: { display: true, text: (pceReady() ? "PCU / interval" : "Vehicles / interval") }
         }
       }
     });
 
     // Standalone centered Donut Chart for Print
     const tc = S.cls.map((c, ci) => Object.keys(S.data).filter(k => k.startsWith(i + "|")).reduce((a, k) => {
-      const factor = S.usePce ? (c.pce !== "" && !isNaN(+c.pce) ? +c.pce : 0) : 1;
+      const factor = pceReady() ? (c.pce !== "" && !isNaN(+c.pce) ? +c.pce : 0) : 1;
       return a + (S.data[k][ci] || 0) * factor;
     }, 0));
     const pieColors = S.cls.map((_, idx) => DISTINCT_PIE_PALETTE[idx % DISTINCT_PIE_PALETTE.length]);
@@ -1679,7 +1681,7 @@ function generatePDFReport() {
           </td>
           ${S.cls.map((c, ci) => `<td style="padding:7px 10px; border-bottom:1px solid #cbd5e1; text-align:right; font-size:12px; color:#000000;">${v[ci] || 0}</td>`).join("")}
           <td style="padding:7px 10px; border-bottom:1px solid #cbd5e1; text-align:right; font-size:12px; font-weight:800; color:#000000;">${rowSum}</td>
-          ${S.usePce ? `<td style="padding:7px 10px; border-bottom:1px solid #cbd5e1; text-align:right; font-size:12px; font-weight:800; color:#15803d;">${pcu(v).toFixed(1)}</td>` : ''}
+          ${pceReady() ? `<td style="padding:7px 10px; border-bottom:1px solid #cbd5e1; text-align:right; font-size:12px; font-weight:800; color:#15803d;">${pcu(v).toFixed(1)}</td>` : ''}
         </tr>
       `;
     });
@@ -1696,18 +1698,18 @@ function generatePDFReport() {
           <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px;">
             <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Total Approach Volume</div>
             <div style="font-size:20px; font-weight:800; color:#000000; margin-top:4px;">${r.totv} <span style="font-size:12px; font-weight:500;">veh</span></div>
-            ${S.usePce ? `<div style="font-size:12px; color:#15803d; font-weight:800; margin-top:2px;">${r.tot.toFixed(1)} PCU</div>` : ''}
+            ${pceReady() ? `<div style="font-size:12px; color:#15803d; font-weight:800; margin-top:2px;">${r.tot.toFixed(1)} PCU</div>` : ''}
           </div>
           <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px;">
-            <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Window (PCU)</div>
+            <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Window (${pceReady() ? 'PCU' : 'Vehicles'})</div>
             <div style="font-size:17px; font-weight:800; color:#1e3a8a; margin-top:6px;">${r.start != null ? pl(r) : 'N/A'}</div>
           </div>
           <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px;">
             <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Volume (PHV)</div>
             <div style="font-size:20px; font-weight:800; color:#000000; margin-top:4px;">
-              ${S.usePce ? `${r.phv.toFixed(1)} <span style="font-size:13px; font-weight:600;">PCU/h</span>` : `${r.veh} <span style="font-size:13px; font-weight:600;">veh/h</span>`}
+              ${pceReady() ? `${r.phv.toFixed(1)} <span style="font-size:13px; font-weight:600;">PCU/h</span>` : `${r.veh} <span style="font-size:13px; font-weight:600;">veh/h</span>`}
             </div>
-            ${S.usePce ? `<div style="font-size:11px; color:#64748b; margin-top:2px;">(${r.veh} vehicles in peak)</div>` : ''}
+            ${pceReady() ? `<div style="font-size:11px; color:#64748b; margin-top:2px;">(${r.veh} vehicles in peak)</div>` : ''}
           </div>
           <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px;">
             <div style="font-size:11px; color:#475569; text-transform:uppercase; font-weight:800;">Peak Hour Factor (PHF)</div>
@@ -1720,7 +1722,7 @@ function generatePDFReport() {
         <!-- Standalone Centered Bar Chart (3/4 width, ~1/3 A4 height) -->
         <div style="margin:0 auto 24px; width:80%; text-align:center;">
           <div style="font-size:13px; font-weight:800; color:#000000; margin-bottom:6px;">
-            ${esc(dn(i))}: Interval Flow Profile (${S.usePce ? 'PCU / ' + S.iv + 'm' : 'Vehicles / ' + S.iv + 'm'})
+            ${esc(dn(i))}: Interval Flow Profile (${pceReady() ? 'PCU / ' + S.iv + 'm' : 'Vehicles / ' + S.iv + 'm'})
           </div>
           <div style="border:1px solid #cbd5e1; border-radius:10px; padding:12px; background:#ffffff; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
             <img src="${volumeChartImg}" style="width:100%; height:260px; object-fit:contain; display:block;" alt="Interval Flow Chart" />
@@ -1754,9 +1756,9 @@ function generatePDFReport() {
           <thead>
             <tr style="background:#f1f5f9;">
               <th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#000000; font-weight:800; border-bottom:1.5px solid #000000;">Time Session</th>
-              ${S.cls.map(c => `<th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#000000; font-weight:800; text-align:right; border-bottom:1.5px solid #000000;">${esc(c.name || 'Class')} ${S.usePce && c.pce ? `(×${c.pce})` : ''}</th>`).join("")}
+              ${S.cls.map(c => `<th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#000000; font-weight:800; text-align:right; border-bottom:1.5px solid #000000;">${esc(c.name || 'Class')} ${pceReady() && c.pce ? `(×${c.pce})` : ''}</th>`).join("")}
               <th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#000000; font-weight:800; text-align:right; border-bottom:1.5px solid #000000;">Total Veh</th>
-              ${S.usePce ? '<th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#15803d; font-weight:800; text-align:right; border-bottom:1.5px solid #000000;">Total PCU</th>' : ''}
+              ${pceReady() ? '<th style="padding:8px 10px; font-size:11px; text-transform:uppercase; color:#15803d; font-weight:800; text-align:right; border-bottom:1.5px solid #000000;">Total PCU</th>' : ''}
             </tr>
           </thead>
           <tbody>
@@ -1770,7 +1772,7 @@ function generatePDFReport() {
                 return `<td style="padding:10px; border-top:2px solid #000000; text-align:right; color:#000000;">${colTotal}</td>`;
               }).join("")}
               <td style="padding:10px; border-top:2px solid #000000; text-align:right; color:#000000;">${r.totv}</td>
-              ${S.usePce ? `<td style="padding:10px; border-top:2px solid #000000; text-align:right; color:#15803d;">${r.tot.toFixed(1)}</td>` : ''}
+              ${pceReady() ? `<td style="padding:10px; border-top:2px solid #000000; text-align:right; color:#15803d;">${r.tot.toFixed(1)}</td>` : ''}
             </tr>
           </tfoot>
         </table>
@@ -1865,7 +1867,7 @@ function generatePDFReport() {
         </div>
         <div style="text-align:right; font-size:12px; color:#334155;">
           <div><b>Survey Duration:</b> ${S.start || '--:--'} – ${S.end || '--:--'}</div>
-          <div><b>Evaluation Metric:</b> ${S.usePce ? 'Passenger Car Equivalent (PCE/PCU)' : 'Vehicle Units'}</div>
+          <div><b>Evaluation Metric:</b> ${pceReady() ? 'Passenger Car Equivalent (PCE/PCU)' : 'Vehicle Units'}</div>
         </div>
       </header>
 
@@ -1924,10 +1926,10 @@ function renderRes() {
     h += `
     <div style="margin-top: 16px; padding-top:16px; border-top: 1px solid var(--border-subtle);">
       <div style="font-family:var(--font-heading); font-size:18px; font-weight:800; margin-bottom:8px;">${esc(dn(i))}</div>
-      <div class="kv-row"><span class="kv-label">Total Volume Counted</span><span class="kv-value">${r.totv} vehicles ${S.usePce ? `(${r.tot.toFixed(1)} PCU)` : ''}</span></div>
+      <div class="kv-row"><span class="kv-label">Total Volume Counted</span><span class="kv-value">${r.totv} vehicles ${pceReady() ? `(${r.tot.toFixed(1)} PCU)` : ''}</span></div>
       ${r.start != null ? `
         <div class="kv-row"><span class="kv-label">Calculated Peak Hour Window</span><span class="kv-value" style="color:var(--brand-green);">${pl(r)}</span></div>
-        <div class="kv-row"><span class="kv-label">Peak Hour Volume (PHV)</span><span class="kv-value">${S.usePce ? `${r.phv.toFixed(1)} PCU (${r.veh} veh)` : `${r.veh} vehicles`}</span></div>
+        <div class="kv-row"><span class="kv-label">Peak Hour Volume (PHV)</span><span class="kv-value">${pceReady() ? `${r.phv.toFixed(1)} PCU (${r.veh} veh)` : `${r.veh} vehicles`}</span></div>
         <div class="kv-row"><span class="kv-label">Peak Hour Factor (PHF)</span><span class="kv-value" style="font-size:17px; font-weight:800;">${r.phf == null ? "n/a" : r.phf.toFixed(2)}</span></div>
       ` : '<div class="wise-card-subtitle" style="margin-top:8px;">Survey span is under one hour, so peak hour window cannot be isolated.</div>'}
     </div>
@@ -2012,14 +2014,14 @@ function renderRes() {
           },
           y: {
             beginAtZero: true,
-            title: { display: true, text: (S.usePce ? "Peak PCU Volume (PCU / hour)" : "Vehicles / interval"), color: isDark ? "#9ba79b" : "#5e665e" }
+            title: { display: true, text: (pceReady() ? "PCU / interval" : "Vehicles / interval"), color: isDark ? "#9ba79b" : "#5e665e" }
           }
         }
       }
     }, dn(i) + " Volume");
 
     const tc = S.cls.map((c, ci) => Object.keys(S.data).filter(k => k.startsWith(i + "|")).reduce((a, k) => {
-      const factor = S.usePce ? (c.pce !== "" && !isNaN(+c.pce) ? +c.pce : 0) : 1;
+      const factor = pceReady() ? (c.pce !== "" && !isNaN(+c.pce) ? +c.pce : 0) : 1;
       return a + (S.data[k][ci] || 0) * factor;
     }, 0));
     const pieColors = S.cls.map((_, idx) => DISTINCT_PIE_PALETTE[idx % DISTINCT_PIE_PALETTE.length]);
