@@ -17,6 +17,11 @@
 try { if (localStorage.getItem("trafficTool5_theme") === "light") document.documentElement.classList.remove("dark"); } catch (e) {}
 </script>
 <script src="vendor/chart.umd.min.js"></script>
+<script>
+/* If the bundled copy is missing from the deployment, fall back to the CDN. */
+window.Chart || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"><\/script>');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 /* Fonts are bundled with the app so they work offline. */
 @font-face {
@@ -1656,6 +1661,11 @@ const DISTINCT_PIE_PALETTE = [
 ];
 
 function mk(id, cfg) {
+  if (typeof Chart === "undefined") {
+    const box = $(id) && $(id).parentElement;
+    if (box) box.innerHTML = '<div class="wise-banner warning" style="margin:0">The chart library did not load. Check your connection and reload. If this is your own deployment, make sure the vendor folder was uploaded.</div>';
+    return;
+  }
   if (CH[id]) CH[id].destroy();
   const isDark = document.documentElement.classList.contains("dark");
   const textColor = isDark ? "#f5f8f5" : "#141b14";
@@ -1839,6 +1849,7 @@ function printComparisonImg() {
 }
 
 function generatePDFReport() {
+  if (typeof Chart === "undefined") { alert("The chart library did not load, so the report cannot be built. Reload the page and try again."); return; }
   const reportDate = esc(S.date || new Date().toISOString().split("T")[0]);
   const u = UN();
   const lab = SL.map(s => s.split(" to ")[0]);
