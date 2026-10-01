@@ -1642,6 +1642,8 @@ function analyse(di) {
   }
   return r;
 }
+const rangeLabels = () => SL.map(s => s.replace(" to ", "-"));
+const rangeTicks = { maxRotation: 60, minRotation: 45, autoSkip: true, autoSkipPadding: 6 };
 const pl = r => (SL[r.start] ? SL[r.start].split(" to ")[0] : "") + " to " + (SL[r.start + r.k - 1] ? SL[r.start + r.k - 1].split(" to ")[1] : "");
 
 const CH = {};
@@ -1784,7 +1786,7 @@ function generatePrintChartImage(type, data, customOptions = {}) {
 
 /* One source for the white, high-contrast chart images used by both the PDF report and Save PNG. */
 function printVolumeImg(i, r) {
-  const lab = SL.map(s => s.split(" to ")[0]);
+  const lab = rangeLabels();
   return generatePrintChartImage("bar", {
     labels: lab,
     datasets: [{
@@ -1798,6 +1800,7 @@ function printVolumeImg(i, r) {
     plugins: { legend: { display: false } },
     scales: {
       x: {
+        ticks: rangeTicks,
         title: { display: true, text: "Survey Session Window" }
       },
       y: {
@@ -1852,7 +1855,6 @@ function generatePDFReport() {
   if (typeof Chart === "undefined") { alert("The chart library did not load, so the report cannot be built. Reload the page and try again."); return; }
   const reportDate = esc(S.date || new Date().toISOString().split("T")[0]);
   const u = UN();
-  const lab = SL.map(s => s.split(" to ")[0]);
 
   let approachesHtml = "";
   S.dirs.forEach((d, i) => {
@@ -2163,7 +2165,7 @@ function renderRes() {
 
   el.innerHTML = h;
 
-  const lab = SL.map(s => s.split(" to ")[0]);
+  const lab = rangeLabels();
   const isDark = document.documentElement.classList.contains("dark");
   const highlightColor = "#1e3a8a"; // Navy/Royal blue peak
   const regularBarColor = "#60a5fa";  // Soft sky blue normal
@@ -2185,6 +2187,7 @@ function renderRes() {
         plugins: { legend: { display: false } },
         scales: {
           x: {
+            ticks: rangeTicks,
             title: { display: true, text: "Session Window", color: isDark ? "#9ba79b" : "#5e665e" }
           },
           y: {
